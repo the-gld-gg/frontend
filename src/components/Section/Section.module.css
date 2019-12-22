@@ -1,0 +1,47 @@
+.section {
+  position: relative;
+  width: 100%;
+}
+
+.sectionContent {
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.sectionContentFullWidth {
+  max-width: none;
+}
+
+.section.horizontalPadding {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+.section.verticalPadding {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+@media only screen and (min-width: 30em) {
+  .section.horizontalPadding {
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+  
+  .section.verticalPadding {
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+}
+
+@media only screen and (min-width: 48em) {
+  .section.horizontalPadding {
+    padding-left: 64px;
+    padding-right: 64px;
+  }
+  
+  .section.verticalPadding {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+}
