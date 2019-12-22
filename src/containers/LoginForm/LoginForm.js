@@ -28,7 +28,7 @@ const LoginForm = (props) => {
         onSubmit={(values, actions) => {
           setLoading(true)
           setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
+            // alert(JSON.stringify(values, null, 2));
             actions.setSubmitting(false);
             setLoading(false)
           }, 2000);
@@ -51,9 +51,7 @@ const LoginForm = (props) => {
             Remember me
           </InputCheckBox>
 
-          <SubmitButton
-            isLoading={loading}
-          >
+          <SubmitButton isLoading={loading}>
             Login
           </SubmitButton>
         </Form>

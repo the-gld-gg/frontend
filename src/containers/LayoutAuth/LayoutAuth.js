@@ -6,7 +6,7 @@ const LayoutAuth = ({
 }) => {
     return (
         <div className={styles.layout}>
-            <div className={styles.container}>
+            <div className={styles.components}>
                 {children}
             </div>
         </div>

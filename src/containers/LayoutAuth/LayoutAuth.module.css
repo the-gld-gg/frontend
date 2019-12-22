@@ -1,16 +1,14 @@
 .layout {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-}
-.container {
-    width: 300px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: #0A154A;
 }
 
-@media (min-width: 500px) {
-    .container {
-        width: 400px;
-    }
+.layout .components {
+  position: relative;
+  width: 100%;
 }
+  

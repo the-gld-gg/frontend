@@ -2,5 +2,9 @@
     width: 100%;
 }
 .container {
+    text-align: left;
     padding: 3px 0;
+    margin: 0 auto 16px;
+    max-width: 400px;
+    width: 100%;
 }

@@ -11,9 +11,11 @@ const SubmitButton = (props) => {
     <LayoutFormControl>
       <FormControl>
         <Button
-            variantColor="teal"
             isLoading={props.isSubmitting}
             type="submit"
+            color="#0A154A"
+            bg="#EE215B"
+            size="lg"
             {...props}
           >
             {props.children}

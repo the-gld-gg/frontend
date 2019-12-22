@@ -36,19 +36,21 @@ const Home = ({
           <SimpleGrid columns={{ sm: 1, md: 3 }} spacing={4}>
             <Card
               imageSrc="https://images.unsplash.com/photo-1467444606224-8254b013a046?ixlib=rb-1.2.1&auto=format&fit=crop&q=80"
-              href="/"
+              href="/register"
               heading="Connect"
               description="Find your local gaming clubs, LAN cafes and gaming bars." />
             <Card
               imageSrc="https://images.unsplash.com/photo-1534423861386-85a16f5d13fd?ixlib=rb-1.2.1&auto=format&fit=crop&q=80"
-              href="/"
+              href="/register"
               heading="Join"
-              description="Register your team and compete in local competitions." />
+              description="Register your team and compete in local competitions."
+              linkText="Register" />
             <Card
               imageSrc="https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?ixlib=rb-1.2.1&auto=format&fit=crop&q=80"
-              href="/"
+              href="/login"
               heading="Play"
-              description="Discover new places to spectate local or professional E-Sports." />
+              description="Discover new places to spectate local or professional E-Sports."
+              linkText="Login" />
           </SimpleGrid>
         </Section>
         <Hero
