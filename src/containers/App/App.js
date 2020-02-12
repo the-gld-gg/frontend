@@ -11,6 +11,7 @@ import About from './../../pages/About/About'
 import Register from './../../pages/Register/Register'
 import Login from './../../pages/Login/Login'
 import Forgot from './../../pages/Forgot/Forgot'
+import Reset from './../../pages/Reset/Reset'
 import './base.min.css'
 
 const App = ({
@@ -33,6 +34,9 @@ const App = ({
         </Route>
         <Route exact path="/forgot">
           <Forgot />
+        </Route>
+        <Route exact path="/reset">
+          <Reset />
         </Route>
       </Switch>
     </Router>

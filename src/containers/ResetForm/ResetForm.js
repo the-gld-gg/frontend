@@ -10,12 +10,17 @@ const ForgotForm = (props) => {
     <>
       <Formik
         initialValues={{
-          email: ""
+          password: "",
+          passwordConfirm: "",
         }}
         validationSchema={Yup.object({
-          email: Yup.string()
-            .email("Invalid email addresss`")
-            .required("Required")
+          password: Yup.string()
+            .required('No password provided.')
+            .min(8, 'Password is too short - should be 8 chars minimum.')
+            .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
+          passwordConfirm: Yup.string()
+            .oneOf([Yup.ref('password'), null], "Passwords must match")
+            .required('Password confirm is required')
         })}
         onSubmit={(values, actions) => {
           setLoading(true)
@@ -27,11 +32,17 @@ const ForgotForm = (props) => {
         }}
       >
         <Form>
+        <InputText
+            label="New password"
+            name="password"
+            type="password"
+            placeholder="New password"
+          />
           <InputText
-            label="Email"
-            name="email"
-            type="email"
-            placeholder="Email address"
+            label="Confirm Password"
+            name="passwordConfirm"
+            type="password"
+            placeholder="Confirm Password"
           />
 
           <SubmitButton isLoading={loading}>
