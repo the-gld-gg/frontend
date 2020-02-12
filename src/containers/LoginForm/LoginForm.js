@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Formik, Form} from "formik";
 import * as Yup from "yup";
+import { Text } from "@chakra-ui/core"
 import InputText from './../../components/InputText/InputText'
 import InputCheckBox from './../../components/InputCheckBox/InputCheckBox'
 import SubmitButton from './../../components/SubmitButton/SubmitButton'
+import { Link } from "react-router-dom"
 
 const LoginForm = (props) => {
   const [loading, setLoading] = useState(false);
@@ -54,6 +56,7 @@ const LoginForm = (props) => {
           <SubmitButton isLoading={loading}>
             Login
           </SubmitButton>
+          <Link to="/forgotpassword"><Text fontSize="xs" color="brand.800">Forgot your password?</Text></Link>
         </Form>
       </Formik>
     </>
