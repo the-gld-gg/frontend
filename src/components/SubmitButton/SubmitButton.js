@@ -16,6 +16,7 @@ const SubmitButton = (props) => {
             color="#0A154A"
             bg="#EE215B"
             size="lg"
+            width="100%"
             {...props}
           >
             {props.children}

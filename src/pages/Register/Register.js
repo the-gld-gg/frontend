@@ -15,7 +15,7 @@ const Register = ({
       <Text as="h3" fontSize="4xl" color="brand.800">Register</Text>
       <RegisterForm />
       <br />
-      <Link to="/login"><Text  color="brand.800">Login ></Text></Link>
+      <Link to="/login"><Text  color="brand.800">Already have an account? Login ></Text></Link>
     </Section>
   </LayoutAuth>
 )

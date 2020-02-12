@@ -88,7 +88,7 @@ const Home = ({
           </Section>
         </Hero>
         <Section horizontalPadding verticalPadding bg="#0A154A">
-          <Text as="h1" fontSize="5xl" color="brand.800">Spectate - Compete - Host</Text>
+          <Text as="h1" fontSize="5xl" color="brand.800">Spectate <Box display={["block", "block", "none"]} />-<Box display={["block", "block", "none"]} /> Compete <Box display={["block", "block", "none"]} />-<Box display={["block", "block", "none"]} /> Host</Text>
           <br />
           <Text fontSize="2xl" color="brand.800">We want to meet every single gamer and gaming group in Melbourne and bring the whole community closer together to create the most exciting local gaming scene in the world.</Text>
           <br />

@@ -1,6 +1,5 @@
 import React from 'react'
 import LayoutAuth from '../../containers/LayoutAuth/LayoutAuth'
-import styles from "./Login.module.css"
 import { Text } from "@chakra-ui/core"
 import Section from "../../components/Section/Section"
 import LoginForm from '../../containers/LoginForm/LoginForm'
@@ -16,7 +15,7 @@ const Login = ({
         <Text as="h3" fontSize="4xl" color="brand.800">Login </Text>
         <LoginForm />
         <br />
-        <Link to="/register"><Text  color="brand.800">Register ></Text></Link>
+        <Link to="/register"><Text  color="brand.800">Don't have an account yet? Register ></Text></Link>
       </Section>
     </LayoutAuth>
 )
