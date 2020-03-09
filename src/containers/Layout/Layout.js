@@ -1,17 +1,19 @@
 import React from 'react'
-import styles from "./Layout.module.css";
+import styles from "./Layout.module.css"
+import Footer from '../Footer/Footer'
 
 const Layout = ({
-    children,
+  children,
 }) => {
-    return (
-        <div className={styles.layout}>
-            {/* Header */}
-            <div className={styles.components}>
-                {children}
-            </div>
-        </div>
-    )
+  return (
+    <div className={styles.layout}>
+      <div className={styles.components}>
+        {/* Header */}
+        {children}
+        <Footer />
+      </div>
+    </div>
+  )
 }
 
 export default Layout
