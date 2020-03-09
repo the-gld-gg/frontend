@@ -69,10 +69,8 @@ const RegisterForm = (props) => {
             I accept all terms and conditions
           </InputCheckBox>
 
-          <SubmitButton
-            isLoading={loading}
-          >
-            Register
+          <SubmitButton isLoading={loading}>
+            REGISTER
           </SubmitButton>
         </Form>
       </Formik>

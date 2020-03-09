@@ -11,11 +11,12 @@ const Register = ({
   children
 }) => (
   <LayoutAuth>
-    <Section horizontalPadding verticalPadding bg="#0A154A">
-      <Text as="h3" fontSize="4xl" color="brand.800">Register</Text>
+    <Section horizontalPadding verticalPadding bg="#EE215B">
+      <Text as="h3" fontSize="5xl" color="white">JOIN THE GLD TODAY!</Text>
+      <br />
       <RegisterForm />
       <br />
-      <Link to="/login"><Text  color="brand.800">Already have an account? Login ></Text></Link>
+      <Link to="/login"><Text  color="brand.900">Already have an account? Login ></Text></Link>
     </Section>
   </LayoutAuth>
 )
