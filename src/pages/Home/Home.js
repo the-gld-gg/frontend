@@ -7,6 +7,7 @@ import Card from "../../components/Card/Card"
 import Section from '../../components/Section/Section'
 import Hero from '../../containers/Hero/Hero'
 import RegisterForm from "../../containers/RegisterForm/RegisterForm"
+import Map from '../../containers/Map/Map'
 
 const Home = ({
   children
@@ -100,6 +101,7 @@ const Home = ({
         <br /><br />
         <Button size="lg" bg="#EE215B" color="brand.900" maxWidth="100%"><Link to="/register">Sign up to TheGLD</Link></Button>
       </Section> */}
+      <Map />
       <Section horizontalPadding verticalPadding bg="#0A154A">
         <SimpleGrid columns={{ sm: 1, md: 3 }} spacing={4}>
           <Box
