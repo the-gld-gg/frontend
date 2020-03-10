@@ -9,7 +9,7 @@ const Layout = ({
   return (
     <div className={styles.layout}>
       <div className={styles.components}>
-        <Header />
+        {/* <Header /> */}
         {children}
         <Footer />
       </div>
