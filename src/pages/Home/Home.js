@@ -15,10 +15,17 @@ const Home = ({
   <Layout>
     <div className={styles.page}>
       <Section horizontalPadding verticalPadding bg="#0A154A">
-        <Box>
-          <Image src="logo1120.png" alt="The GLD" />
-          <Text fontSize="4xl" color="brand.800">TheGLD is putting Melbourne's gaming community on the map.</Text>
-        </Box>
+        <SimpleGrid minChildWidth="480px" spacing="40px">
+          <Box>
+            <Image src="logo512.png" alt="The GLD" display="inline-block" />
+          </Box>
+          <Box display="flex" justifyContent="center" flexDirection="column">
+            <Text fontSize="4xl" color="brand.800">The GLD exists to connect gamers with other gamers. We are putting the different parts of Melbourne's gaming community on the map.</Text>
+            <br />
+            <br />
+            <Text fontSize="4xl" color="brand.800">We are joining the dots and creating an ecosystem. The world of gaming is changing, enter The GLD.</Text>
+          </Box>
+        </SimpleGrid>
       </Section>
       {/* <Section horizontalPadding verticalPadding fullWidth bg="#EE215B">
         <Box>
