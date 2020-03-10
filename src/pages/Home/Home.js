@@ -114,7 +114,9 @@ const Home = ({
             <br />
             <Text as="h5" fontSize="3xl" color="white">Who is this for?</Text>
             <br />
-            <Text color="white">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Text>
+            <Text as="h6" fontSize="xl" color="brand.300">LAN Cafes, Gaming bars, University clubs</Text>
+            <br />
+            <Text color="white">Put your venue or club on our map so that people that work and live nearby can easily find you.</Text>
           </Box>
           <Box
             border="1px solid white"
@@ -127,7 +129,9 @@ const Home = ({
             <br />
             <Text as="h5" fontSize="3xl" color="brand.900">Who is this for?</Text>
             <br />
-            <Text color="brand.900">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Text>
+            <Text as="h6" fontSize="xl" color="brand.800">Event organisers, venues and clubs</Text>
+            <br />
+            <Text color="brand.900">Add your events and competitions to our calendar so that gamers in Melbourne will know what's on and when.</Text>
           </Box>
           <Box
             border="1px solid #0098dc"
@@ -139,7 +143,9 @@ const Home = ({
             <br />
             <Text as="h5" fontSize="3xl" color="white">Who is this for?</Text>
             <br />
-            <Text color="white">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</Text>
+            <Text as="h6" fontSize="xl" color="brand.300">PS4, XBOX, Nintendo, PC, Mobile (and everything in between)</Text>
+            <br />
+            <Text color="white">Find people at work, school or uni who are playing the same game as you.<br />Start your own get-togethers and promote them on our map.<br />Easily find places to Play, Compete & Watch your favourite games.</Text>
           </Box>
         </SimpleGrid>
       </Section>
