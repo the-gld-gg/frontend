@@ -57,7 +57,7 @@ const Home = ({
           <Box>
             <Text as="h3" fontSize="4xl" color="brand.900">Put yourself on the map</Text>
             <br/>
-            <SimpleGrid columns={{ xs: 2 }} spacing={4}>
+            <SimpleGrid columns={{ xs: 1, sm: 2 }} spacing={4}>
               <Box>
                 <Button variantColor="blue" variant="outline" size="lg" maxWidth="100%"><Link to="/register">Register your venue</Link></Button>
                 <br />
