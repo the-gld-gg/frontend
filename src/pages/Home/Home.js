@@ -15,9 +15,9 @@ const Home = ({
   <Layout>
     <div className={styles.page}>
       <Section horizontalPadding verticalPadding bg="#0A154A">
-        <SimpleGrid minChildWidth="480px" spacing="40px">
-          <Box>
-            <Image src="logo512.png" alt="The GLD" display="inline-block" />
+        <SimpleGrid minChildWidth="280px" spacing="40px">
+          <Box display="flex" justifyContent="center" flexDirection="column">
+            <Image src="logo512.png" alt="The GLD" display="inline-block" maxWidth="100%" width="512px" />
           </Box>
           <Box display="flex" justifyContent="center" flexDirection="column">
             <Text fontSize="4xl" color="brand.800">The GLD exists to connect gamers with other gamers. We are putting the different parts of Melbourne's gaming community on the map.</Text>
