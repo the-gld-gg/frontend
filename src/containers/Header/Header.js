@@ -1,6 +1,5 @@
 import React from 'react'
 import { Box, Image } from "@chakra-ui/core"
-import Section from '../../components/Section/Section'
 import styles from "./Header.module.css"
 
 const Header = () => (

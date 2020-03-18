@@ -6,6 +6,7 @@ import {
   Alert,
   AlertIcon
 } from "@chakra-ui/core";
+import gtmHandler from "../../utils/gtmHandler"
 import InputText from './../../components/InputText/InputText'
 import SubmitButton from './../../components/SubmitButton/SubmitButton'
 
@@ -52,6 +53,14 @@ const RegisterForm = (props) => {
                   messages: ["You have successfully registered."],
                   status: "success"
                 });
+                gtmHandler({
+                  event: "registration success",
+                  eventType: "form response",
+                  category: {
+                    primaryCategory: "form interaction",
+                    subCategory: props.gtm.subCategory
+                  }
+                })
               })
               .catch(error => {
                 setResult({
@@ -79,7 +88,20 @@ const RegisterForm = (props) => {
             placeholder="Password"
           />
 
-          <SubmitButton isLoading={loading}>REGISTER</SubmitButton>
+          <SubmitButton
+            isLoading={loading}
+            onClick={() => {
+              gtmHandler({
+                event: "click register",
+                eventType: "form submit",
+                category: {
+                  primaryCategory: "form interaction",
+                  subCategory: props.gtm.subCategory
+                }
+              })
+            }}>
+            REGISTER
+          </SubmitButton>
 
           {result &&
             result.messages.map((item, index) => (
