@@ -63,13 +63,13 @@ const Home = ({
             <br/>
             <SimpleGrid columns={{ xs: 1, sm: 2 }} spacing={4}>
               <Box>
-                <Button variantColor="blue" variant="outline" size="lg" maxWidth="100%"><Link to="/register">Register your venue</Link></Button>
+                <Button variantColor="brand" variant="outline" size="lg" maxWidth="100%"><Link to="/register">Register your venue</Link></Button>
                 <br />
                 <br />
                 <Text color="brand.900">Show gamers your location.</Text>
               </Box>
               <Box>
-                <Button variantColor="blue" variant="outline" size="lg" maxWidth="100%"><Link to="/register">Sign up to TheGLD</Link></Button>
+                <Button variantColor="brand" variant="outline" size="lg" maxWidth="100%"><Link to="/register">Sign up to TheGLD</Link></Button>
                 <br />
                 <br />
                 <Text color="brand.900">Get updates for competitions and events.</Text>
