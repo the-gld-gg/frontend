@@ -3,11 +3,8 @@ import { Link } from "react-router-dom"
 import Layout from '../../containers/Layout/Layout'
 import styles from "./Home.module.css"
 import { SimpleGrid, Text, Box, Icon, Button, Image } from "@chakra-ui/core"
-import Card from "../../components/Card/Card"
 import Section from '../../components/Section/Section'
-import Hero from '../../containers/Hero/Hero'
 import RegisterForm from "../../containers/RegisterForm/RegisterForm"
-import Map from '../../containers/Map/Map'
 
 const Home = ({
   children

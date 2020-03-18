@@ -4,12 +4,9 @@ import * as Yup from "yup";
 import axios from 'axios';
 import {
   Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription
+  AlertIcon
 } from "@chakra-ui/core";
 import InputText from './../../components/InputText/InputText'
-import InputCheckBox from './../../components/InputCheckBox/InputCheckBox'
 import SubmitButton from './../../components/SubmitButton/SubmitButton'
 
 const RegisterForm = (props) => {
@@ -21,9 +18,7 @@ const RegisterForm = (props) => {
         initialValues={{
           name: "",
           email: "",
-          password: "",
-          passwordConfirm: "",
-          terms: false
+          password: ""
         }}
         validationSchema={Yup.object({
           name: Yup.string().required("Name is required"),
@@ -33,14 +28,7 @@ const RegisterForm = (props) => {
           password: Yup.string()
             .required("No password provided.")
             .min(8, "Password is too short - should be 8 chars minimum.")
-            .matches(/[a-zA-Z]/, "Password can only contain Latin letters."),
-          passwordConfirm: Yup.string()
-            .oneOf([Yup.ref("password"), null], "Passwords must match")
-            .required("Password confirm is required"),
-          terms: Yup.bool().oneOf(
-            [true],
-            "Terms and Conditions should be accepted"
-          )
+            .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
         })}
         onSubmit={(values, actions) => {
           setLoading(true);
@@ -50,8 +38,8 @@ const RegisterForm = (props) => {
                 name: values.name,
                 email: values.email,
                 password: values.password,
-                password_confirmation: values.passwordConfirm,
-                terms: values.terms
+                password_confirmation: values.password,
+                terms: true
               })
               .then(response => {
                 if (response.data.error) {
@@ -61,7 +49,7 @@ const RegisterForm = (props) => {
                   });
                 }
                 setResult({
-                  messages: ["You have successfully registered"],
+                  messages: ["You have successfully registered."],
                   status: "success"
                 });
               })
@@ -90,21 +78,14 @@ const RegisterForm = (props) => {
             type="password"
             placeholder="Password"
           />
-          <InputText
-            label="Confirm Password"
-            name="passwordConfirm"
-            type="password"
-            placeholder="Confirm Password"
-          />
-          <InputCheckBox name="terms">
-            I accept all terms and conditions
-          </InputCheckBox>
 
           <SubmitButton isLoading={loading}>REGISTER</SubmitButton>
 
           {result &&
-            result.messages.map(item => (
-              <Alert status={result.status}>
+            result.messages.map((item, index) => (
+              <Alert
+                key={`Alert${index}`}
+                status={result.status}>
                 <AlertIcon />
                 {item}
               </Alert>
