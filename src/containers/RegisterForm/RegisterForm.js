@@ -64,7 +64,7 @@ const RegisterForm = (props) => {
               })
               .catch(error => {
                 setResult({
-                  messages: ["Something went wrong"],
+                  messages: ["Something went wrong."],
                   status: "error"
                 });
               });

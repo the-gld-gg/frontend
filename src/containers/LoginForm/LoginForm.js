@@ -1,36 +1,71 @@
 import React, { useState } from "react";
 import { Formik, Form} from "formik";
 import * as Yup from "yup";
-import { Text } from "@chakra-ui/core"
+import axios from 'axios';
+import {
+  Alert,
+  AlertIcon,
+  Text
+} from "@chakra-ui/core";
+import gtmHandler from "../../utils/gtmHandler"
 import InputText from './../../components/InputText/InputText'
-import InputCheckBox from './../../components/InputCheckBox/InputCheckBox'
 import SubmitButton from './../../components/SubmitButton/SubmitButton'
 import { Link } from "react-router-dom"
 
 const LoginForm = (props) => {
   const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState(null);
+
   return (
     <>
       <Formik
         initialValues={{
           email: "",
-          password: "",
-          remember: false
+          password: ""
         }}
         validationSchema={Yup.object({
           email: Yup.string()
             .email("Invalid email addresss`")
             .required("Required"),
           password: Yup.string()
-            .required('No password provided.') 
-            .min(8, 'Password is too short - should be 8 chars minimum.')
-            .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
-          remember: Yup.boolean()
+            .required("No password provided.") 
+            .min(8, "Password is too short - should be 8 chars minimum.")
+            .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
         })}
         onSubmit={(values, actions) => {
           setLoading(true)
           setTimeout(() => {
-            // alert(JSON.stringify(values, null, 2));
+            axios
+              .post("https://guild.ehsangazar.com/api/login", {
+                email: values.email,
+                password: values.password
+              })
+              .then(response => {
+                if (response.data.error) {
+                  setResult({
+                    messages: Object.values(response.data.data).map(item => item[0]),
+                    status: "error"
+                  });
+                }
+                setResult({
+                  messages: ["You have successfully logged in."],
+                  status: "success"
+                });
+                gtmHandler({
+                  event: "login success",
+                  eventType: "form response",
+                  category: {
+                    primaryCategory: "form interaction",
+                    subCategory: props.gtm.subCategory
+                  }
+                })
+              })
+              .catch(error => {
+                setResult({
+                  messages: ["Something went wrong."],
+                  status: "error"
+                });
+              });
             actions.setSubmitting(false);
             setLoading(false)
           }, 2000);
@@ -49,20 +84,24 @@ const LoginForm = (props) => {
             type="password"
             placeholder="Password"
           />
-          <InputCheckBox name="remember">
-            Remember me
-          </InputCheckBox>
 
           <SubmitButton isLoading={loading}>
             Login
           </SubmitButton>
+          {result &&
+            result.messages.map((item, index) => (
+              <Alert
+                key={`Alert${index}`}
+                status={result.status}>
+                <AlertIcon />
+                {item}
+              </Alert>
+            ))}
           <Link to="/forgotpassword"><Text fontSize="xs" color="brand.800">Forgot your password?</Text></Link>
         </Form>
       </Formik>
     </>
   );
 };
-
-
 
 export default LoginForm;
