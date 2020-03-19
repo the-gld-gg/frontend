@@ -12,6 +12,7 @@ class Register extends React.Component {
   componentDidMount() {
     gtmHandler({
       event: "trackPage",
+      eventType: "page_view",
       additionalProps: {
         page: {
           pageInfo: {

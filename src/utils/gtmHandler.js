@@ -11,8 +11,8 @@ const gtmHandler = ({
 
     const newData = {
       event: event || "reactjs.event",
-      pageCategory: category,
-      pageAction: action,
+      category,
+      action,
       ...additionalProps
     }
 

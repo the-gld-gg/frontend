@@ -11,6 +11,7 @@ class Home extends React.Component {
   componentDidMount() {
     gtmHandler({
       event: "trackPage",
+      eventType: "page_view",
       additionalProps: {
         page: {
           pageInfo: {
@@ -60,7 +61,7 @@ class Home extends React.Component {
                       onClick={() => {
                         gtmHandler({
                           event: "register your venue",
-                          eventType: "button click",
+                          eventType: "button_click",
                           category: {
                             primaryCategory: "content interaction",
                             subCategory: "homepage"
@@ -80,7 +81,7 @@ class Home extends React.Component {
                       onClick={() => {
                         gtmHandler({
                           event: "sign up to thegld",
-                          eventType: "button click",
+                          eventType: "button_click",
                           category: {
                             primaryCategory: "content interaction",
                             subCategory: "homepage"

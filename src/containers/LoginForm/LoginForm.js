@@ -53,7 +53,7 @@ const LoginForm = (props) => {
                 });
                 gtmHandler({
                   event: "login success",
-                  eventType: "form response",
+                  eventType: "form_response",
                   category: {
                     primaryCategory: "form interaction",
                     subCategory: props.gtm.subCategory
@@ -85,7 +85,18 @@ const LoginForm = (props) => {
             placeholder="Password"
           />
 
-          <SubmitButton isLoading={loading}>
+          <SubmitButton
+            isLoading={loading}
+            onClick={() => {
+              gtmHandler({
+                event: "click login",
+                eventType: "form_submit",
+                category: {
+                  primaryCategory: "form interaction",
+                  subCategory: props.gtm.subCategory
+                }
+              })
+            }}>
             Login
           </SubmitButton>
           {result &&

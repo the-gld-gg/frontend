@@ -55,7 +55,7 @@ const RegisterForm = (props) => {
                 });
                 gtmHandler({
                   event: "registration success",
-                  eventType: "form response",
+                  eventType: "form_response",
                   category: {
                     primaryCategory: "form interaction",
                     subCategory: props.gtm.subCategory
@@ -93,7 +93,7 @@ const RegisterForm = (props) => {
             onClick={() => {
               gtmHandler({
                 event: "click register",
-                eventType: "form submit",
+                eventType: "form_submit",
                 category: {
                   primaryCategory: "form interaction",
                   subCategory: props.gtm.subCategory
