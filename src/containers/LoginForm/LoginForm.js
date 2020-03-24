@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Formik, Form} from "formik";
+import React, { useState } from "react"
+import { Redirect } from "react-router"
+import { Formik, Form} from "formik"
 import * as Yup from "yup";
 import axios from 'axios';
 import {
@@ -15,6 +16,12 @@ import { Link } from "react-router-dom"
 const LoginForm = (props) => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
+
+  if (result && result.redirect) {
+    return (
+      <Redirect push to={result.redirect} />
+    )
+  }
 
   return (
     <>
@@ -41,6 +48,9 @@ const LoginForm = (props) => {
                 password: values.password
               })
               .then(response => {
+                actions.setSubmitting(false);
+                setLoading(false)
+
                 if (response.data.error) {
                   setResult({
                     messages: Object.values(response.data.data).map(item => item[0]),
@@ -49,7 +59,8 @@ const LoginForm = (props) => {
                 }
                 setResult({
                   messages: ["You have successfully logged in."],
-                  status: "success"
+                  status: "success",
+                  redirect: "/"
                 });
                 gtmHandler({
                   event: "login success",
@@ -66,8 +77,6 @@ const LoginForm = (props) => {
                   status: "error"
                 });
               });
-            actions.setSubmitting(false);
-            setLoading(false)
           }, 2000);
         }}
       >
