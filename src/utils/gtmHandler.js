@@ -2,6 +2,7 @@ import { WINDOW } from "./environment"
 
 const gtmHandler = ({
   event,
+  eventType,
   category = "",
   action = "",
   additionalProps = {}
@@ -11,6 +12,7 @@ const gtmHandler = ({
 
     const newData = {
       event: event || "reactjs.event",
+      eventType,
       category,
       action,
       ...additionalProps

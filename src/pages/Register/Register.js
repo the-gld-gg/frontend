@@ -19,7 +19,7 @@ class Register extends React.Component {
             pageName: "Register",
             platform: "website",
             language: "en",
-            pathName: "/"
+            pathName: "/register"
           },
           category: {
             pageType: "form page",
