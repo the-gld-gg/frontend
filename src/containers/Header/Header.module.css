@@ -1,3 +1,19 @@
+.header {
+  position: fixed;
+  padding: 1em;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 9;
+}
+
 .header img {
+  height: auto;
   width: 64px;
+}
+
+.header button {
+  border: none;
 }

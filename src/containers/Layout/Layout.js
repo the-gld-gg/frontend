@@ -1,7 +1,7 @@
-import React from 'react'
+import React from "react"
 import styles from "./Layout.module.css"
-// import Header from '../Header/Header'
-import Footer from '../Footer/Footer'
+import Header from "../Header/Header"
+import Footer from "../Footer/Footer"
 
 const Layout = ({
   children,
@@ -9,7 +9,7 @@ const Layout = ({
   return (
     <div className={styles.layout}>
       <div className={styles.components}>
-        {/* <Header /> */}
+        <Header />
         {children}
         <Footer />
       </div>

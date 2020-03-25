@@ -1,4 +1,6 @@
 .layout {
+  box-sizing: border-box;
+  padding-top: 96px;
   width: 100%;
   display: flex;
   align-items: center;
