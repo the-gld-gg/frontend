@@ -1,10 +1,9 @@
-import React from 'react'
+import React from "react"
 import { Link } from "react-router-dom"
 import gtmHandler from "../../utils/gtmHandler"
-import Layout from '../../containers/Layout/Layout'
-import styles from "./Home.module.css"
+import Layout from "../../containers/Layout/Layout"
 import { SimpleGrid, Text, Box, Icon, Button, Image } from "@chakra-ui/core"
-import Section from '../../components/Section/Section'
+import Section from "../../components/Section/Section"
 import RegisterForm from "../../containers/RegisterForm/RegisterForm"
 
 class Home extends React.Component {
@@ -32,14 +31,14 @@ class Home extends React.Component {
   render() {
     return (
       <Layout>
-        <div className={styles.page}>
+        <Box>
           <Section horizontalPadding verticalPadding bg="#0A154A">
             <SimpleGrid minChildWidth="280px" spacing="40px">
               <Box display="flex" justifyContent="center" flexDirection="column">
                 <Image src="logo.svg" alt="The GLD" display="inline-block" maxWidth="100%" width="512px" />
               </Box>
               <Box display="flex" justifyContent="center" flexDirection="column">
-                <Text fontSize="4xl" color="brand.800">The GLD exists to connect gamers with other gamers. We are putting the different parts of Melbourne's gaming community on the map.</Text>
+                <Text fontSize="4xl" color="brand.800">The GLD exists to connect gamers with other gamers. We are putting the different parts of Melbourne"s gaming community on the map.</Text>
                 <br />
                 <br />
                 <Text fontSize="4xl" color="brand.800">We are joining the dots and creating an ecosystem. The world of gaming is changing, enter The GLD.</Text>
@@ -134,7 +133,7 @@ class Home extends React.Component {
                 <br />
                 <Text as="h6" fontSize="xl" color="brand.800">Event organisers, venues and clubs</Text>
                 <br />
-                <Text color="brand.900">Add your events and competitions to our calendar so that gamers in Melbourne will know what's on and when.</Text>
+                <Text color="brand.900">Add your events and competitions to our calendar so that gamers in Melbourne will know what"s on and when.</Text>
               </Box>
               <Box
                 border="1px solid #0098dc"
@@ -157,7 +156,7 @@ class Home extends React.Component {
             <br />
             <RegisterForm gtm={{ subCategory: "homepage" }} />
           </Section>
-        </div>
+        </Box>
       </Layout>
     )
   }
