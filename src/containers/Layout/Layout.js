@@ -1,5 +1,6 @@
 import React from "react"
 import styles from "./Layout.module.css"
+import { Box } from "@chakra-ui/core"
 import Header from "../Header/Header"
 import Footer from "../Footer/Footer"
 
@@ -7,13 +8,13 @@ const Layout = ({
   children,
 }) => {
   return (
-    <div className={styles.layout}>
-      <div className={styles.components}>
+    <Box className={styles.layout}>
+      <Box className={styles.components}>
         <Header />
         {children}
         <Footer />
-      </div>
-    </div>
+      </Box>
+    </Box>
   )
 }
 

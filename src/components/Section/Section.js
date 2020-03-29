@@ -10,6 +10,7 @@ const Section = ({
   horizontalPadding = false,
   verticalPadding = false,
   fullWidth = false,
+  style,
   heading = "",
   description = ""
 }) => (
@@ -19,7 +20,8 @@ const Section = ({
     className={classnames(styles.section, {
       [styles.horizontalPadding]: horizontalPadding,
       [styles.verticalPadding]: verticalPadding
-    })}>
+    })}
+    style={style}>
     <Box className={classnames(styles.sectionContent, {
       [styles.sectionContentFullWidth]: fullWidth
     })}>

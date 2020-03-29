@@ -5,14 +5,15 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
-import customTheme from './../../configs/customTheme'
-import Home from './../../pages/Home/Home'
-import About from './../../pages/About/About'
-import Register from './../../pages/Register/Register'
-import Login from './../../pages/Login/Login'
-import Forgot from './../../pages/Forgot/Forgot'
-import Reset from './../../pages/Reset/Reset'
-import './base.min.css'
+import customTheme from "./../../configs/customTheme"
+import Home from "./../../pages/Home/Home"
+import About from "./../../pages/About/About"
+import Register from "./../../pages/Register/Register"
+import RegisterSuccess from "./../../pages/RegisterSuccess/RegisterSuccess"
+import Login from "./../../pages/Login/Login"
+import Forgot from "./../../pages/Forgot/Forgot"
+import Reset from "./../../pages/Reset/Reset"
+import "./base.min.css"
 
 const App = ({
   children,
@@ -28,6 +29,9 @@ const App = ({
         </Route>
         <Route path="/register">
           <Register />
+        </Route>
+        <Route path="/register-success">
+          <RegisterSuccess />
         </Route>
         <Route exact path="/login">
           <Login />
