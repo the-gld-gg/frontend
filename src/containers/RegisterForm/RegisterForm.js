@@ -63,7 +63,7 @@ const RegisterForm = (props) => {
                 setResult({
                   messages: ["You have successfully registered."],
                   status: "success",
-                  redirect: "/"
+                  redirect: "/register-success"
                 })
                 gtmHandler({
                   event: "registration success",
