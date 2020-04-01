@@ -2,6 +2,7 @@ import React from "react";
 import { ThemeProvider } from "@chakra-ui/core";
 import {
   BrowserRouter as Router,
+  Redirect,
   Switch,
   Route,
 } from "react-router-dom";
@@ -15,9 +16,28 @@ import Forgot from "./../../pages/Forgot/Forgot"
 import Reset from "./../../pages/Reset/Reset"
 import "./base.min.css"
 
-const App = ({
-  children,
-}) => (
+
+const PrivateRoute = ({ children, ...rest }) => {
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        localStorage && localStorage.getItem('user') ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/login",
+              state: { from: location }
+            }}
+          />
+        )
+      }
+    />
+  );
+}
+
+const App = ({ children }) => (
   <ThemeProvider theme={customTheme}>
     <Router>
       <Switch>
@@ -42,9 +62,12 @@ const App = ({
         <Route exact path="/reset">
           <Reset />
         </Route>
+        <PrivateRoute exact path="/private-route">
+          Test for PrivateRoute
+        </PrivateRoute>
       </Switch>
     </Router>
   </ThemeProvider>
-)
+);
 
 export default App

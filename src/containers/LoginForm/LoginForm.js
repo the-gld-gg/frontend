@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Redirect } from "react-router"
 import { Formik, Form} from "formik"
 import * as Yup from "yup";
@@ -56,7 +56,11 @@ const LoginForm = (props) => {
                     messages: Object.values(response.data.data).map(item => item[0]),
                     status: "error"
                   });
+                  return;
                 }
+
+                localStorage.setItem("user", JSON.stringify(response.data));
+
                 setResult({
                   messages: ["You have successfully logged in."],
                   status: "success",
