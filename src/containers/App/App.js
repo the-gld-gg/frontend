@@ -11,6 +11,7 @@ import Home from "./../../pages/Home/Home"
 import About from "./../../pages/About/About"
 import Register from "./../../pages/Register/Register"
 import RegisterSuccess from "./../../pages/RegisterSuccess/RegisterSuccess"
+import Profile from "./../../pages/Profile/Profile"
 import Login from "./../../pages/Login/Login"
 import Forgot from "./../../pages/Forgot/Forgot"
 import Reset from "./../../pages/Reset/Reset"
@@ -23,7 +24,9 @@ const PrivateRoute = ({ children, ...rest }) => {
       {...rest}
       render={({ location }) =>
         localStorage && localStorage.getItem('user') ? (
-          children
+          React.cloneElement(children, { 
+            user: JSON.parse(localStorage.getItem('user'))
+          })
         ) : (
           <Redirect
             to={{
@@ -37,37 +40,39 @@ const PrivateRoute = ({ children, ...rest }) => {
   );
 }
 
-const App = ({ children }) => (
-  <ThemeProvider theme={customTheme}>
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route path="/register">
-          <Register />
-        </Route>
-        <Route path="/register-success">
-          <RegisterSuccess />
-        </Route>
-        <Route exact path="/login">
-          <Login />
-        </Route>
-        <Route exact path="/forgot">
-          <Forgot />
-        </Route>
-        <Route exact path="/reset">
-          <Reset />
-        </Route>
-        <PrivateRoute exact path="/private-route">
-          Test for PrivateRoute
-        </PrivateRoute>
-      </Switch>
-    </Router>
-  </ThemeProvider>
-);
+const App = ({ children }) => {
+  return (
+    <ThemeProvider theme={customTheme}>
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route path="/about">
+            <About />
+          </Route>
+          <Route path="/register">
+            <Register />
+          </Route>
+          <Route path="/register-success">
+            <RegisterSuccess />
+          </Route>
+          <Route exact path="/login">
+            <Login />
+          </Route>
+          <Route exact path="/forgot">
+            <Forgot />
+          </Route>
+          <Route exact path="/reset">
+            <Reset />
+          </Route>
+          <PrivateRoute exact path="/profile">
+            <Profile />
+          </PrivateRoute>
+        </Switch>
+      </Router>
+    </ThemeProvider>
+  )
+};
 
 export default App

@@ -59,7 +59,7 @@ const LoginForm = (props) => {
                   return;
                 }
 
-                localStorage.setItem("user", JSON.stringify(response.data));
+                localStorage.setItem("user", JSON.stringify(response.data.data));
 
                 setResult({
                   messages: ["You have successfully logged in."],
