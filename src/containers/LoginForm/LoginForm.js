@@ -97,7 +97,8 @@ const LoginForm = (props) => {
             type="password"
             placeholder="Password"
           />
-
+          <Link to="/forgot"><Text  color="brand.900">Forgot your password?</Text></Link>
+          <br />
           <SubmitButton
             isLoading={loading}
             onClick={() => {

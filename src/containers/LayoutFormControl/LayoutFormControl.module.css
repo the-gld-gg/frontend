@@ -1,10 +1,11 @@
 .layout {
-    width: 100%;
+  width: 100%;
 }
-.container {
-    text-align: left;
-    padding: 3px 0;
-    margin: 0 auto 16px;
-    max-width: 768px;
-    width: 100%;
+
+.layout .components {
+  text-align: left;
+  padding: 3px 0;
+  margin: 0 auto 16px;
+  max-width: 768px;
+  width: 100%;
 }

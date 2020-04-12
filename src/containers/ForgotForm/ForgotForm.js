@@ -1,11 +1,19 @@
-import React, { useState } from "react";
-import { Formik, Form} from "formik";
-import * as Yup from "yup";
-import InputText from '../../components/InputText/InputText'
-import SubmitButton from '../../components/SubmitButton/SubmitButton'
+import React, { useState } from "react"
+import { Formik, Form} from "formik"
+import * as Yup from "yup"
+import axios from "axios"
+import {
+  Alert,
+  AlertIcon
+} from "@chakra-ui/core"
+import gtmHandler from "../../utils/gtmHandler"
+import InputText from "./../../components/InputText/InputText"
+import SubmitButton from "./../../components/SubmitButton/SubmitButton"
 
 const ForgotForm = (props) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState(null)
+
   return (
     <>
       <Formik
@@ -19,11 +27,41 @@ const ForgotForm = (props) => {
         })}
         onSubmit={(values, actions) => {
           setLoading(true)
-          setTimeout(() => {
-            // alert(JSON.stringify(values, null, 2));
-            actions.setSubmitting(false);
-            setLoading(false)
-          }, 2000);
+          axios
+            .post("https://guild.ehsangazar.com/api/forgot", {
+              email: values.email
+            })
+            .then(response => {
+              actions.setSubmitting(false)
+              setLoading(false)
+
+              if (response.data.error) {
+                setResult({
+                  messages: Object.values(response.data.data).map(item => item[0]),
+                  status: "error"
+                })
+                return
+              }
+
+              setResult({
+                messages: ["A request has been sent. Kindly check your inbox."],
+                status: "success"
+              })
+              gtmHandler({
+                event: "forgot success",
+                eventType: "form_response",
+                category: {
+                  primaryCategory: "form interaction",
+                  subCategory: "forgot page"
+                }
+              })
+            })
+            .catch(error => {
+              setResult({
+                messages: ["Something went wrong."],
+                status: "error"
+              })
+            })
         }}
       >
         <Form>
@@ -34,9 +72,29 @@ const ForgotForm = (props) => {
             placeholder="Email address"
           />
 
-          <SubmitButton isLoading={loading}>
+          <SubmitButton
+            isLoading={loading}
+            onClick={() => {
+              gtmHandler({
+                event: "click submit",
+                eventType: "form_submit",
+                category: {
+                  primaryCategory: "form interaction",
+                  subCategory: "forgot page"
+                }
+              })
+            }}>
             Submit
           </SubmitButton>
+          {result &&
+            result.messages.map((item, index) => (
+              <Alert
+                key={`Alert${index}`}
+                status={result.status}>
+                <AlertIcon />
+                {item}
+              </Alert>
+            ))}
         </Form>
       </Formik>
     </>

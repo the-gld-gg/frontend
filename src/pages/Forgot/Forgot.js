@@ -11,11 +11,11 @@ const Forgot = ({
   children
 }) => (
     <LayoutAuth>
-      <Section horizontalPadding verticalPadding bg="#0A154A">
+      <Section horizontalPadding verticalPadding bg="#EE215B">
         <Text as="h3" fontSize="4xl" color="brand.800">Forgot password</Text>
         <ForgotForm />
         <br />
-        <Link to="/login"><Text  color="brand.800">Back to login ></Text></Link>
+        <Link to="/login"><Text  color="brand.900">Back to login ></Text></Link>
       </Section>
     </LayoutAuth>
 )
