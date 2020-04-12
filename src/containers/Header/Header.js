@@ -30,7 +30,11 @@ class Header extends React.Component {
   }
 
   logout = () => {
-    // Logout actions
+    this.setState({
+      user: null
+    }, () => {
+      localStorage.removeItem("user")
+    })
   }
   
   render () {
@@ -52,7 +56,8 @@ class Header extends React.Component {
             <MenuDivider />
             {
               user &&
-              user.email ?
+              user.email &&
+              user.api_token ?
               <MenuGroup title="Account">
                 <MenuItem onClick={() => { this.logout() }}>
                   Logout

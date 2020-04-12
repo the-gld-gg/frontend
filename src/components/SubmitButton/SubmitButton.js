@@ -16,6 +16,10 @@ const SubmitButton = (props) => (
         size="lg"
         width="100%"
         fontSize="3xl"
+        _hover={{
+          bg: "brand.300",
+          color: "brand.900"
+        }}
         {...props}
       >
         {props.children}
