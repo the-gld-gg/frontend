@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { Redirect } from "react-router"
 import { Formik, Form} from "formik"
-import * as Yup from "yup";
-import axios from 'axios';
+import * as Yup from "yup"
+import axios from "axios"
 import {
   Alert,
   AlertIcon,
   Text
-} from "@chakra-ui/core";
+} from "@chakra-ui/core"
 import gtmHandler from "../../utils/gtmHandler"
-import InputText from './../../components/InputText/InputText'
-import SubmitButton from './../../components/SubmitButton/SubmitButton'
+import InputText from "./../../components/InputText/InputText"
+import SubmitButton from "./../../components/SubmitButton/SubmitButton"
 import { Link } from "react-router-dom"
 
 const LoginForm = (props) => {
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState(null)
 
   if (result && result.redirect) {
     return (
@@ -48,24 +48,24 @@ const LoginForm = (props) => {
                 password: values.password
               })
               .then(response => {
-                actions.setSubmitting(false);
+                actions.setSubmitting(false)
                 setLoading(false)
 
                 if (response.data.error) {
                   setResult({
                     messages: Object.values(response.data.data).map(item => item[0]),
                     status: "error"
-                  });
-                  return;
+                  })
+                  return
                 }
 
-                localStorage.setItem("user", JSON.stringify(response.data.data));
+                localStorage.setItem("user", JSON.stringify(response.data.data))
 
                 setResult({
                   messages: ["You have successfully logged in."],
                   status: "success",
-                  redirect: "/"
-                });
+                  redirect: "/profile"
+                })
                 gtmHandler({
                   event: "login success",
                   eventType: "form_response",
@@ -79,9 +79,9 @@ const LoginForm = (props) => {
                 setResult({
                   messages: ["Something went wrong."],
                   status: "error"
-                });
-              });
-          }, 2000);
+                })
+              })
+          }, 2000)
         }}
       >
         <Form>
@@ -125,7 +125,7 @@ const LoginForm = (props) => {
         </Form>
       </Formik>
     </>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm
