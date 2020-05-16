@@ -32,6 +32,7 @@ class Home extends React.Component {
     return (
       <Layout>
         <Box>
+          Test
           <Section horizontalPadding verticalPadding bg="#0A154A">
             <SimpleGrid minChildWidth="280px" spacing="40px">
               <Box display="flex" justifyContent="center" flexDirection="column">
