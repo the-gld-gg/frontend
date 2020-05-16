@@ -10,6 +10,7 @@ import customTheme from "./../../configs/customTheme"
 import Home from "./../../pages/Home/Home"
 import About from "./../../pages/About/About"
 import Register from "./../../pages/Register/Register"
+import RegisterJourney from "./../../pages/RegisterJourney/RegisterJourney"
 import RegisterSuccess from "./../../pages/RegisterSuccess/RegisterSuccess"
 import Profile from "./../../pages/Profile/Profile"
 import Login from "./../../pages/Login/Login"
@@ -53,6 +54,9 @@ const App = ({ children }) => {
           </Route>
           <Route path="/register">
             <Register />
+          </Route>
+          <Route path="/register-journey">
+            <RegisterJourney />
           </Route>
           <Route path="/register-success">
             <RegisterSuccess />

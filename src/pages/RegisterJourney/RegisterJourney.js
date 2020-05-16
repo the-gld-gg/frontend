@@ -2,7 +2,7 @@ import React from "react"
 import gtmHandler from "../../utils/gtmHandler"
 import LayoutAuth from "./../../containers/LayoutAuth/LayoutAuth"
 import Section from "../../components/Section/Section"
-import RegisterForm from "../../containers/RegisterForm/RegisterForm"
+import RegisterJourneyForm from "../../containers/RegisterJourneyForm/RegisterJourneyForm"
 
 class Register extends React.Component {
   componentDidMount() {
@@ -12,14 +12,14 @@ class Register extends React.Component {
       additionalProps: {
         page: {
           pageInfo: {
-            pageName: "Register",
+            pageName: "Register journey",
             platform: "website",
             language: "en",
-            pathName: "/register"
+            pathName: "/register-journey"
           },
           category: {
             pageType: "form page",
-            primaryCategory: "registration page"
+            primaryCategory: "registration journey page"
           }
         }
       }
@@ -30,7 +30,7 @@ class Register extends React.Component {
     return (
       <LayoutAuth>
         <Section horizontalPadding verticalPadding bg="#EE215B">
-          <RegisterForm gtm={{ subCategory: "registration page" }} />
+          <RegisterJourneyForm gtm={{ subCategory: "registration journey page" }} />
         </Section>
       </LayoutAuth>
     )

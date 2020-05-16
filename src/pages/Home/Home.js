@@ -152,8 +152,6 @@ class Home extends React.Component {
             </SimpleGrid>
           </Section>
           <Section horizontalPadding verticalPadding bg="#EE215B">
-            <Text as="h3" fontSize="5xl" color="white">JOIN THE GLD TODAY!</Text>
-            <br />
             <RegisterForm gtm={{ subCategory: "homepage" }} />
           </Section>
         </Box>
