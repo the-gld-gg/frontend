@@ -28,7 +28,7 @@ const ForgotForm = (props) => {
         onSubmit={(values, actions) => {
           setLoading(true)
           axios
-            .post("https://guild.ehsangazar.com/api/forgot", {
+            .post("https://api.thegld.gg/v1/user/forgot", {
               email: values.email
             })
             .then(response => {

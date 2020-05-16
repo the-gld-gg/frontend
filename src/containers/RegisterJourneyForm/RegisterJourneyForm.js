@@ -532,7 +532,7 @@ const RegisterJourneyForm = (props) => {
         onSubmit={(values, actions) => {
           // setLoading(true)
           //   axios
-          //     .post("https://guild.ehsangazar.com/api/register-journey", {
+          //     .post("https://api.thegld.gg/v1/user/register-journey", {
           //       terms: true
           //     })
           //     .then(response => {

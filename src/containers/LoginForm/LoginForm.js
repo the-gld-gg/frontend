@@ -43,7 +43,7 @@ const LoginForm = (props) => {
           setLoading(true)
           setTimeout(() => {
             axios
-              .post("https://guild.ehsangazar.com/api/login", {
+              .post("https://api.thegld.gg/v1/user/login", {
                 email: values.email,
                 password: values.password
               })

@@ -51,7 +51,7 @@ const RegisterForm = (props) => {
             redirect: "/register-journey" // register-success
           })
           // axios
-          //   .post("https://guild.ehsangazar.com/api/register", {
+          //   .post("https://api.thegld.gg/v1/user/register", {
           //     name: values.name,
           //     email: values.email,
           //     password: values.password,
