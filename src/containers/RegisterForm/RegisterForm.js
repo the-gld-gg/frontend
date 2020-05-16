@@ -44,50 +44,45 @@ const RegisterForm = (props) => {
             .matches(/[a-zA-Z]/, "Password can only contain Latin letters.")
         })}
         onSubmit={(values, actions) => {
-          // setLoading(true)
-          setResult({
-            messages: ["You have successfully registered."],
-            status: "success",
-            redirect: "/register-journey" // register-success
-          })
-          // axios
-          //   .post("https://api.thegld.gg/v1/user/register", {
-          //     name: values.name,
-          //     email: values.email,
-          //     password: values.password,
-          //     password_confirmation: values.password,
-          //     terms: true
-          //   })
-          //   .then(response => {
-          //     actions.setSubmitting(false)
-          //     setLoading(false)
+          setLoading(true)
+          axios
+            .post("https://api.thegld.gg/v1/user/register", {
+              name: values.name,
+              email: values.email,
+              password: values.password,
+              password_confirmation: values.password,
+              terms: true
+            })
+            .then(response => {
+              actions.setSubmitting(false)
+              setLoading(false)
 
-          //     if (response.data.error) {
-          //       setResult({
-          //         messages: Object.values(response.data.data).map(item => item[0]),
-          //         status: "error"
-          //       })
-          //     }
-          //     setResult({
-          //       messages: ["You have successfully registered."],
-          //       status: "success",
-          //       redirect: "/register-journey" // register-success
-          //     })
-          //     gtmHandler({
-          //       event: "registration success",
-          //       eventType: "form_response",
-          //       category: {
-          //         primaryCategory: "form interaction",
-          //         subCategory: props.gtm.subCategory
-          //       }
-          //     })
-          //   })
-          //   .catch(error => {
-          //     setResult({
-          //       messages: ["Something went wrong."],
-          //       status: "error"
-          //     })
-          //   })
+              if (response.data.error) {
+                setResult({
+                  messages: Object.values(response.data.data).map(item => item[0]),
+                  status: "error"
+                })
+              }
+              setResult({
+                messages: ["You have successfully registered."],
+                status: "success",
+                redirect: "/register-journey" // register-success
+              })
+              gtmHandler({
+                event: "registration success",
+                eventType: "form_response",
+                category: {
+                  primaryCategory: "form interaction",
+                  subCategory: props.gtm.subCategory
+                }
+              })
+            })
+            .catch(error => {
+              setResult({
+                messages: ["Something went wrong."],
+                status: "error"
+              })
+            })
         }}        
       >
         <Form>
