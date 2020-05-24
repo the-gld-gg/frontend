@@ -43,7 +43,7 @@ const LoginForm = (props) => {
           setLoading(true)
           setTimeout(() => {
             axios
-              .post("https://api.thegld.gg/v1/user/login", {
+              .post("http://149.28.165.115/api/v1/user/login", {
                 email: values.email,
                 password: values.password
               })

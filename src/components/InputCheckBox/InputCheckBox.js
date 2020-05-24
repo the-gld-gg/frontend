@@ -7,13 +7,32 @@ import { Checkbox } from "@chakra-ui/core";
 import ErrorMessage from '../ErrorMessage/ErrorMessage'
 import LayoutFormControl from '../../containers/LayoutFormControl/LayoutFormControl'
 
-const InputCheckBox = ({ label, color = "brand.900", ...props }) => {
+const InputCheckBox = ({
+  variantColor = "blue",
+  size = "lg",
+  spacing = 6,
+  color = "white",
+  fontWeight = "bold",
+  textAlign = "left",
+  ...props
+}) => {
   const [field, meta] = useField(props);
 
   return (
     <LayoutFormControl>
       <FormControl>
-        <Checkbox {...field} {...props} color={color}>{props.children}</Checkbox>
+        <Checkbox
+          variantColor={variantColor}
+          size={size}
+          spacing={spacing}
+          color={color}
+          fontWeight={fontWeight}
+          textAlign={textAlign}
+          {...field}
+          {...props}
+        >
+          {props.children}
+        </Checkbox>
         {meta.touched && meta.error ? (
           <ErrorMessage>
             {meta.error}

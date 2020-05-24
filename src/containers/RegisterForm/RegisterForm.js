@@ -46,7 +46,7 @@ const RegisterForm = (props) => {
         onSubmit={(values, actions) => {
           setLoading(true)
           axios
-            .post("https://api.thegld.gg/v1/user/register", {
+            .post("http://149.28.165.115/api/v1/user/register", {
               name: values.name,
               email: values.email,
               password: values.password,
