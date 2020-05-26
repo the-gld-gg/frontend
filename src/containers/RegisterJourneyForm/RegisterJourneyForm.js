@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Redirect } from "react-router"
 import { Formik, Form} from "formik"
 import axios from "axios"
@@ -14,8 +14,20 @@ import SubmitButton from "./../../components/SubmitButton/SubmitButton"
 const RegisterJourneyForm = (props) => {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
+  const [games, setGames] = useState([])
   const [step, setStep] = useState(1)
   const [userType, setUserType] = useState("gamer")
+
+  useEffect(() => {
+    axios
+      .get("https://api.thegld.gg/api/v1/game/list")
+      .then(response => {
+        setGames(response.data.games)
+      })
+      .catch(error => {
+        console.log('error in fetching games', error)
+      })
+  }, [])
 
   if (result && result.redirect) {
     return (
@@ -55,7 +67,7 @@ const RegisterJourneyForm = (props) => {
         onSubmit={(values, actions) => {
           setLoading(true)
           axios
-            .post("http://149.28.165.115/api/v1/user/register-journey", {
+            .post("https://api.thegld.gg/api/v1/user/register-journey", {
               userType,
               values
             })
