@@ -15,18 +15,22 @@ const RegisterJourneyForm = (props) => {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
   const [games, setGames] = useState([])
+  const [genres, setGenres] = useState([])
+  const [platforms, setPlatforms] = useState([])
   const [step, setStep] = useState(1)
   const [userType, setUserType] = useState("gamer")
 
   useEffect(() => {
-    axios
-      .get("https://api.thegld.gg/api/v1/game/list")
-      .then(response => {
-        setGames(response.data.games)
-      })
-      .catch(error => {
-        console.log('error in fetching games', error)
-      })
+    axios.all([
+      axios.get("https://api.thegld.gg/api/v1/game/list"),
+      axios.get("https://api.thegld.gg/api/v1/genre/list"),
+      axios.get("https://api.thegld.gg/api/v1/platform/list")
+    ])
+      .then(axios.spread(function (game, genre, platform) {
+        setGames(game.data.games)
+        setGenres(genre.data.genres)
+        setPlatforms(platform.data.platforms)
+      }))
   }, [])
 
   if (result && result.redirect) {
@@ -132,12 +136,16 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="platforms" value="pc">PC</InputCheckBox>
-                <InputCheckBox name="platforms" value="ps4">PS4</InputCheckBox>
-                <InputCheckBox name="platforms" value="xbox">XBox</InputCheckBox>
-                <InputCheckBox name="platforms" value="nintendo">Nintendo</InputCheckBox>
-                <InputCheckBox name="platforms" value="mobile">Mobile</InputCheckBox>
-                <InputCheckBox name="platforms" value="arcade">Arcade</InputCheckBox>
+                {
+                  platforms &&
+                  platforms.length > 0 &&
+                  platforms.map(item => {
+                    const platform = item.platform
+                    return (
+                      <InputCheckBox name="platforms" value={platform.id}>{platform.name}</InputCheckBox>
+                    )
+                  })
+                }
               </div>
               <br /> <br />
               <Button {...buttonProps} onClick={() => setStep(3)}>
@@ -154,10 +162,16 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="genres" value="rts">Real Time Strategy</InputCheckBox>
-                <InputCheckBox name="genres" value="fps">First Person Shooter</InputCheckBox>
-                <InputCheckBox name="genres" value="sports">Sports</InputCheckBox>
-                <InputCheckBox name="genres" value="multiplayer">Multiplayer</InputCheckBox>
+                {
+                  genres &&
+                  genres.length > 0 &&
+                  genres.map(item => {
+                    const genre = item.genre
+                    return (
+                      <InputCheckBox name="genres" value={genre.id}>{genre.name}</InputCheckBox>
+                    )
+                  })
+                }
               </div>
               <br /> <br />
               <Button {...buttonProps} onClick={() => setStep(4)}>
@@ -174,12 +188,16 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="games" value="lol">League of Legends</InputCheckBox>
-                <InputCheckBox name="games" value="dota2">DOTA2</InputCheckBox>
-                <InputCheckBox name="games" value="cod">Call of Duty</InputCheckBox>
-                <InputCheckBox name="games" value="overwatch">Overwatch</InputCheckBox>
-                <InputCheckBox name="games" value="hots">Heroes of the storm</InputCheckBox>
-                <InputCheckBox name="games" value="csgo">CS:GO</InputCheckBox>
+                {
+                  games &&
+                  games.length > 0 &&
+                  games.map(item => {
+                    const game = item.game
+                    return (
+                      <InputCheckBox name="games" value={game.id}>{game.name}</InputCheckBox>
+                    )
+                  })
+                }
               </div>
               <br /> <br />
               <Button {...buttonProps} onClick={() => setStep(5)}>
@@ -253,12 +271,16 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="venuePlatforms" value="pc">PC</InputCheckBox>
-                <InputCheckBox name="venuePlatforms" value="ps4">PS4</InputCheckBox>
-                <InputCheckBox name="venuePlatforms" value="xbox">XBox</InputCheckBox>
-                <InputCheckBox name="venuePlatforms" value="nintendo">Nintendo</InputCheckBox>
-                <InputCheckBox name="venuePlatforms" value="mobile">Mobile</InputCheckBox>
-                <InputCheckBox name="venuePlatforms" value="arcade">Arcade</InputCheckBox>
+                {
+                  platforms &&
+                  platforms.length > 0 &&
+                  platforms.map(item => {
+                    const platform = item.platform
+                    return (
+                      <InputCheckBox name="venuePlatforms" value={platform.id}>{platform.name}</InputCheckBox>
+                    )
+                  })
+                }
               </div>
               <br /> <br />
               <Button {...buttonProps} onClick={() => setStep(8)}>
@@ -423,12 +445,16 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="organiserPlatforms" value="pc">PC</InputCheckBox>
-                <InputCheckBox name="organiserPlatforms" value="ps4">PS4</InputCheckBox>
-                <InputCheckBox name="organiserPlatforms" value="xbox">XBox</InputCheckBox>
-                <InputCheckBox name="organiserPlatforms" value="nintendo">Nintendo</InputCheckBox>
-                <InputCheckBox name="organiserPlatforms" value="mobile">Mobile</InputCheckBox>
-                <InputCheckBox name="organiserPlatforms" value="arcade">Arcade</InputCheckBox>
+                {
+                  platforms &&
+                  platforms.length > 0 &&
+                  platforms.map(item => {
+                    const platform = item.platform
+                    return (
+                      <InputCheckBox name="organiserPlatforms" value={platform.id}>{platform.name}</InputCheckBox>
+                    )
+                  })
+                }
               </div>
               <br /> <br />
               <Button {...buttonProps} onClick={() => setStep(15)}>
@@ -445,12 +471,16 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="organiserGames" value="lol">League of Legends</InputCheckBox>
-                <InputCheckBox name="organiserGames" value="dota2">DOTA2</InputCheckBox>
-                <InputCheckBox name="organiserGames" value="cod">Call of Duty</InputCheckBox>
-                <InputCheckBox name="organiserGames" value="overwatch">Overwatch</InputCheckBox>
-                <InputCheckBox name="organiserGames" value="hots">Heroes of the storm</InputCheckBox>
-                <InputCheckBox name="organiserGames" value="csgo">CS:GO</InputCheckBox>
+                {
+                  games &&
+                  games.length > 0 &&
+                  games.map(item => {
+                    const game = item.game
+                    return (
+                      <InputCheckBox name="organiserGames" value={game.id}>{game.name}</InputCheckBox>
+                    )
+                  })
+                }
               </div>
               <br /> <br />
               <Button {...buttonProps} onClick={() => setStep(16)}>
