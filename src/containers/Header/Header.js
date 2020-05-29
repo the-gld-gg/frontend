@@ -50,8 +50,7 @@ const Header = (props) => {
           <MenuDivider />
           {
             user &&
-            user.email &&
-            user.api_token ?
+            user.access_token ?
             <MenuGroup title="Account">
               <MenuItem
                 onClick={() => {

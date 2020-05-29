@@ -71,7 +71,7 @@ const RegisterJourneyForm = (props) => {
         onSubmit={(values, actions) => {
           setLoading(true)
           axios
-            .post("https://api.thegld.gg/api/v1/user/register-journey", {
+            .post("https://api.thegld.gg/api/v1/user/profile", {
               userType,
               values
             })
