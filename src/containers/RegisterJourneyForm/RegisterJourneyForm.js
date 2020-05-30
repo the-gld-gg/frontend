@@ -73,7 +73,7 @@ const RegisterJourneyForm = (props) => {
           axios
             .post("https://api.thegld.gg/api/v1/user/profile", {
               userType,
-              values
+              ...values
             })
             .then(response => {
               actions.setSubmitting(false)
@@ -139,10 +139,15 @@ const RegisterJourneyForm = (props) => {
                 {
                   platforms &&
                   platforms.length > 0 &&
-                  platforms.map(item => {
-                    const platform = item.platform
+                  platforms.map(platform => {
                     return (
-                      <InputCheckBox name="platforms" value={platform.id}>{platform.name}</InputCheckBox>
+                      <InputCheckBox
+                        key={platform.id}
+                        name="platforms"
+                        value={platform.id}
+                      >
+                        {platform.name}
+                      </InputCheckBox>
                     )
                   })
                 }
@@ -165,10 +170,15 @@ const RegisterJourneyForm = (props) => {
                 {
                   genres &&
                   genres.length > 0 &&
-                  genres.map(item => {
-                    const genre = item.genre
+                  genres.map(genre => {
                     return (
-                      <InputCheckBox name="genres" value={genre.id}>{genre.name}</InputCheckBox>
+                      <InputCheckBox
+                        key={genre.id}
+                        name="genres"
+                        value={genre.id}
+                      >
+                        {genre.name}
+                      </InputCheckBox>
                     )
                   })
                 }
@@ -191,10 +201,15 @@ const RegisterJourneyForm = (props) => {
                 {
                   games &&
                   games.length > 0 &&
-                  games.map(item => {
-                    const game = item.game
+                  games.map(game => {
                     return (
-                      <InputCheckBox name="games" value={game.id}>{game.name}</InputCheckBox>
+                      <InputCheckBox
+                        key={game.id}
+                        name="games"
+                        value={game.id}
+                      >
+                        {game.name}
+                      </InputCheckBox>
                     )
                   })
                 }
@@ -274,10 +289,15 @@ const RegisterJourneyForm = (props) => {
                 {
                   platforms &&
                   platforms.length > 0 &&
-                  platforms.map(item => {
-                    const platform = item.platform
+                  platforms.map(platform => {
                     return (
-                      <InputCheckBox name="venuePlatforms" value={platform.id}>{platform.name}</InputCheckBox>
+                      <InputCheckBox
+                        key={platform.id}
+                        name="venuePlatforms"
+                        value={platform.id}
+                      >
+                        {platform.name}
+                      </InputCheckBox>
                     )
                   })
                 }
@@ -448,10 +468,15 @@ const RegisterJourneyForm = (props) => {
                 {
                   platforms &&
                   platforms.length > 0 &&
-                  platforms.map(item => {
-                    const platform = item.platform
+                  platforms.map(platform => {
                     return (
-                      <InputCheckBox name="organiserPlatforms" value={platform.id}>{platform.name}</InputCheckBox>
+                      <InputCheckBox
+                        key={platform.id}
+                        name="organiserPlatforms"
+                        value={platform.id}
+                      >
+                        {platform.name}
+                      </InputCheckBox>
                     )
                   })
                 }
@@ -474,10 +499,15 @@ const RegisterJourneyForm = (props) => {
                 {
                   games &&
                   games.length > 0 &&
-                  games.map(item => {
-                    const game = item.game
+                  games.map(game => {
                     return (
-                      <InputCheckBox name="organiserGames" value={game.id}>{game.name}</InputCheckBox>
+                      <InputCheckBox
+                        key={game.id}
+                        name="organiserGames"
+                        value={game.id}
+                      >
+                        {game.name}
+                      </InputCheckBox>
                     )
                   })
                 }
