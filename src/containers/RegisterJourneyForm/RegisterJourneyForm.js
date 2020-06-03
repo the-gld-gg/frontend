@@ -63,40 +63,200 @@ const RegisterJourneyForm = (props) => {
           venuePlatforms: [],
           venueFacilities: [],
           venueGamingFacilities: [],
-          gamerType: "",
+          gamerType: [],
+          olias: "",
           organiserPlatforms: [],
           organiserGames: [],
           organiserEquipment: []
         }}
         onSubmit={(values, actions) => {
           setLoading(true)
-          axios
-            .post("https://api.thegld.gg/api/v1/user/profile", {
-              userType,
-              ...values
-            })
-            .then(response => {
-              actions.setSubmitting(false)
-              setLoading(false)
+          const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null
+          if (!user) return
 
+          axios({
+            method: "POST",
+            headers: {
+              "x-access-token": user.access_token
+            },
+            url: "https://api.thegld.gg/api/v1/user/profile",
+            data: {
+              games: values.games,
+              genres: values.genres,
+              platforms: values.platforms
+            }
+          })
+            .then(response => {
               if (response.data.error) {
                 setResult({
                   messages: Object.values(response.data.data).map(item => item[0]),
                   status: "error"
                 })
               }
-              setResult({
-                messages: ["You have successfully registered."],
-                status: "success"
-              })
+
               gtmHandler({
-                event: "registration journey success",
+                event: "registration journey profile success",
                 eventType: "form_response",
                 category: {
                   primaryCategory: "form interaction",
                   subCategory: props.gtm.subCategory
+                },
+                additionalProps: {
+                  games: values.games,
+                  genres: values.genres,
+                  platforms: values.platforms
                 }
               })
+
+              if (userType === "venue") {
+                axios({
+                  method: "POST",
+                  headers: {
+                    "x-access-token": user.access_token
+                  },
+                  url: "https://api.thegld.gg/api/v1/user/profile/venue-flow",
+                  data: {
+                    venue: {
+                      name: values.vname,
+                      address: values.vaddress,
+                      games: values.venueGames,
+                      platforms: values.venuePlatforms,
+                      lan: values.venueGamingFacilities.indexOf("lan") !== -1 ? 1 : 0,
+                      gaming_booth: values.venueGamingFacilities.indexOf("gaming_booth") !== -1 ? 1 : 0,
+                      booth: values.venueGamingFacilities.indexOf("booth") !== -1 ? 1 : 0,
+                      tv_screens: values.venueGamingFacilities.indexOf("tv_screens") !== -1 ? 1 : 0,
+                      arena: values.venueGamingFacilities.indexOf("arena") !== -1 ? 1 : 0,
+                      soft_drinks: values.venueFacilities.indexOf("soft_drinks") !== -1 ? 1 : 0,
+                      alchohol: values.venueFacilities.indexOf("alchohol") !== -1 ? 1 : 0,
+                      food: values.venueFacilities.indexOf("food") !== -1 ? 1 : 0
+                    }
+                  }
+                })
+                  .then(response => {
+                    actions.setSubmitting(false)
+                    setLoading(false)
+
+                    if (response.data.error) {
+                      setResult({
+                        messages: Object.values(response.data.data).map(item => item[0]),
+                        status: "error"
+                      })
+                    }
+
+                    gtmHandler({
+                      event: "registration journey profile venue success",
+                      eventType: "form_response",
+                      category: {
+                        primaryCategory: "form interaction",
+                        subCategory: props.gtm.subCategory
+                      },
+                      additionalProps: {
+                        venue: {
+                          name: values.vname,
+                          address: values.vaddress,
+                          games: values.venueGames,
+                          platforms: values.venuePlatforms,
+                          gamingFacilities: values.venueGamingFacilities,
+                          facilities: values.venueFacilities
+                        }
+                      }
+                    })
+                  })
+                  .catch(error => {
+                    setResult({
+                      messages: ["Something went wrong."],
+                      status: "error"
+                    })
+                  })
+              } else if (userType === "organiser") {
+                axios({
+                  method: "POST",
+                  headers: {
+                    "x-access-token": user.access_token
+                  },
+                  url: "https://api.thegld.gg/api/v1/user/profile/organiser-flow",
+                  data: {
+                    organiser: {
+                      name: values.oalias,
+                      games: values.organiserGames,
+                      platforms: values.organiserPlatforms,
+                      venue_equipment: values.organiserEquipment.indexOf("venue_equipment") !== -1 ? 1 : 0,
+                      byo_equipment: values.organiserEquipment.indexOf("byo_equipment") !== -1 ? 1 : 0,
+                      source_equipment: values.organiserEquipment.indexOf("source_equipment") !== -1 ? 1 : 0
+                    }
+                  }
+                })
+                  .then(response => {
+                    actions.setSubmitting(false)
+                    setLoading(false)
+
+                    if (response.data.error) {
+                      setResult({
+                        messages: Object.values(response.data.data).map(item => item[0]),
+                        status: "error"
+                      })
+                    }
+
+                    gtmHandler({
+                      event: "registration journey profile organiser success",
+                      eventType: "form_response",
+                      category: {
+                        primaryCategory: "form interaction",
+                        subCategory: props.gtm.subCategory
+                      },
+                      additionalProps: {
+                        organiser: {
+                          name: values.oalias,
+                          games: values.organiserGames,
+                          platforms: values.organiserPlatforms,
+                          equipment: values.organiserEquipment
+                        }
+                      }
+                    })
+                  })
+                  .catch(error => {
+                    setResult({
+                      messages: ["Something went wrong."],
+                      status: "error"
+                    })
+                  })
+              } else if (userType === "gamer") {
+                axios
+                  .post("https://api.thegld.gg/api/v1/user/profile/user-flow", {
+                    social: values.gamerType.indexOf("social") !== -1 ? 1 : 0,
+                    competitive: values.gamerType.indexOf("competitive") !== -1 ? 1 : 0,
+                    other: values.gamerType.indexOf("other") !== -1 ? 1 : 0
+                  })
+                  .then(response => {
+                    actions.setSubmitting(false)
+                    setLoading(false)
+
+                    if (response.data.error) {
+                      setResult({
+                        messages: Object.values(response.data.data).map(item => item[0]),
+                        status: "error"
+                      })
+                    }
+
+                    gtmHandler({
+                      event: "registration journey profile gamer success",
+                      eventType: "form_response",
+                      category: {
+                        primaryCategory: "form interaction",
+                        subCategory: props.gtm.subCategory
+                      },
+                      additionalProps: {
+                        gamerType: values.gamerType
+                      }
+                    })
+                  })
+                  .catch(error => {
+                    setResult({
+                      messages: ["Something went wrong."],
+                      status: "error"
+                    })
+                  })
+              }
             })
             .catch(error => {
               setResult({
@@ -318,9 +478,9 @@ const RegisterJourneyForm = (props) => {
               <br />
               <div>
                 <InputCheckBox name="venueGamingFacilities" value="lan">LAN</InputCheckBox>
-                <InputCheckBox name="venueGamingFacilities" value="pgb">Private Gaming Booths</InputCheckBox>
+                <InputCheckBox name="venueGamingFacilities" value="gaming_booth">Private Gaming Booths</InputCheckBox>
                 <InputCheckBox name="venueGamingFacilities" value="booth">Private booth</InputCheckBox>
-                <InputCheckBox name="venueGamingFacilities" value="stream">TV screens / streams</InputCheckBox>
+                <InputCheckBox name="venueGamingFacilities" value="tv_screens">TV screens / streams</InputCheckBox>
                 <InputCheckBox name="venueGamingFacilities" value="arena">Arena</InputCheckBox>
               </div>
               <br /> <br />
@@ -338,8 +498,8 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="venueFacilities" value="sd">Soft drinks</InputCheckBox>
-                <InputCheckBox name="venueFacilities" value="ad">Alcoholic drinks</InputCheckBox>
+                <InputCheckBox name="venueFacilities" value="soft_drinks">Soft drinks</InputCheckBox>
+                <InputCheckBox name="venueFacilities" value="alchohol">Alcoholic drinks</InputCheckBox>
                 <InputCheckBox name="venueFacilities" value="food">Food</InputCheckBox>
               </div>
               <br /> <br />
@@ -395,7 +555,7 @@ const RegisterJourneyForm = (props) => {
               <br />
               <div>
                 <InputCheckBox name="gamerType" value="social">Play socially</InputCheckBox>
-                <InputCheckBox name="gamerType" value="comp">Play competitively</InputCheckBox>
+                <InputCheckBox name="gamerType" value="competitive">Play competitively</InputCheckBox>
                 <InputCheckBox name="gamerType" value="other">Other</InputCheckBox>
               </div>
               <br /> <br />
@@ -527,9 +687,9 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="organiserEquipment" value="vEquip">Venue equipment</InputCheckBox>
-                <InputCheckBox name="organiserEquipment" value="byoEquip">BYO equipment</InputCheckBox>
-                <InputCheckBox name="organiserEquipment" value="sourceEquip">I would like to source the equipment when I need it</InputCheckBox>
+                <InputCheckBox name="organiserEquipment" value="venue_equipment">Venue equipment</InputCheckBox>
+                <InputCheckBox name="organiserEquipment" value="byo_equip">BYO equipment</InputCheckBox>
+                <InputCheckBox name="organiserEquipment" value="source_equip">I would like to source the equipment when I need it</InputCheckBox>
               </div>
               <br /> <br />
               <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep(17)}>

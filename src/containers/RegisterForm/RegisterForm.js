@@ -51,6 +51,7 @@ const RegisterForm = (props) => {
               email: values.email,
               password: values.password,
               password_confirmation: values.password,
+              confirmEmailUrl: "/register-journey",
               terms: true
             })
             .then(response => {
@@ -63,11 +64,15 @@ const RegisterForm = (props) => {
                   status: "error"
                 })
               }
+
+              localStorage.setItem("user", JSON.stringify(response.data.user))
+
               setResult({
                 messages: ["You have successfully registered."],
                 status: "success",
                 redirect: "/register-journey" // register-success
               })
+
               gtmHandler({
                 event: "registration success",
                 eventType: "form_response",
