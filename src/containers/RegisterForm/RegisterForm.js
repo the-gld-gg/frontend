@@ -65,7 +65,21 @@ const RegisterForm = (props) => {
                 })
               }
 
-              localStorage.setItem("user", JSON.stringify(response.data.user))
+              if (response.data && response.data.user) {
+                localStorage.setItem("user", JSON.stringify(response.data.user))
+              }
+
+              if (response.data && response.data.message && response.data.message === "User already exists with this email") {
+                axios
+                  .post("https://api.thegld.gg/api/v1/user/login", {
+                    email: values.email,
+                    password: values.password
+                  }).then(response => {
+                    if (response.data && response.data.user) {
+                      localStorage.setItem("user", JSON.stringify(response.data.user))
+                    }
+                  })
+              }
 
               setResult({
                 messages: ["You have successfully registered."],
