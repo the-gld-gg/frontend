@@ -110,7 +110,10 @@ const RegisterJourneyForm = (props) => {
                 additionalProps: {
                   games: values.games,
                   genres: values.genres,
-                  platforms: values.platforms
+                  platforms: values.platforms,
+                  psn: values.psn,
+                  xbox_id: values.xbox_id,
+                  steam_id: values.steam_id
                 }
               })
 
