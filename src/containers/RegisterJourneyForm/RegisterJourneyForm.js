@@ -17,7 +17,7 @@ const RegisterJourneyForm = (props) => {
   const [games, setGames] = useState([])
   const [genres, setGenres] = useState([])
   const [platforms, setPlatforms] = useState([])
-  const [step, setStep] = useState(1)
+  const [step, setStep] = useState("aboutYou")
   const [userType, setUserType] = useState("gamer")
 
   useEffect(() => {
@@ -58,6 +58,9 @@ const RegisterJourneyForm = (props) => {
           games: [],
           genres: [],
           platforms: [],
+          psn: "",
+          xbox_id: "",
+          steam_id: "",
           vname: "",
           vaddress: "",
           venuePlatforms: [],
@@ -83,7 +86,10 @@ const RegisterJourneyForm = (props) => {
             data: {
               games: values.games,
               genres: values.genres,
-              platforms: values.platforms
+              platforms: values.platforms,
+              psn: values.psn,
+              xbox_id: values.xbox_id,
+              steam_id: values.steam_id
             }
           })
             .then(response => {
@@ -265,30 +271,31 @@ const RegisterJourneyForm = (props) => {
               })
             })
         }}        
-      >
+      >{
+        props =>
         <Form>
           <div style={{ width: "375px", maxWidth: "100%", margin: "0 auto" }}>
             <div
               style={{
-                display: step === 1 ? "block" : "none", // A little bit about yourself
+                display: step === "aboutYou" ? "block" : "none", // A little bit about yourself
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
                 First, a bit about yourself
               </Text>
               <br />
-              <Button {...buttonProps} onClick={() => setStep(2)}>
+              <Button {...buttonProps} onClick={() => setStep("platforms")}>
                 Next
               </Button>
               <br />
               <br />
-              <Button {...buttonProps} onClick={() => setStep(12)}>
+              <Button {...buttonProps} onClick={() => setStep("gamerThanks")}>
                 Add later
               </Button>
             </div>
             <div
               style={{
-                display: step === 2 ? "block" : "none", // Preferred platforms
+                display: step === "platforms" ? "block" : "none", // Preferred platforms
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -313,13 +320,13 @@ const RegisterJourneyForm = (props) => {
                 }
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(3)}>
+              <Button {...buttonProps} onClick={() => setStep("genres")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 3 ? "block" : "none", // Favourite genres
+                display: step === "genres" ? "block" : "none", // Favourite genres
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -344,13 +351,13 @@ const RegisterJourneyForm = (props) => {
                 }
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(4)}>
+              <Button {...buttonProps} onClick={() => setStep("games")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 4 ? "block" : "none", // Favourite games
+                display: step === "games" ? "block" : "none", // Favourite games
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -375,13 +382,44 @@ const RegisterJourneyForm = (props) => {
                 }
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(5)}>
+              <Button {...buttonProps} onClick={() => setStep("gamerTags")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 5 ? "block" : "none", // What are you here to do ??
+                display: step === "gamerTags" ? "block" : "none", // Gamer tags
+              }}
+            >
+              <Text as="h4" fontSize="3xl" color="white">
+                Add your gamer tags for more visibility
+              </Text>
+              <br />
+              <InputText
+                label="PlayStation Network"
+                name="psn"
+                type="psn"
+                placeholder="PlayStation Network"
+              />
+              <InputText
+                label="XBox Live"
+                name="xbox_id"
+                type="xbox_id"
+                placeholder="XBox Live"
+              />
+              <InputText
+                label="Steam ID"
+                name="steam_id"
+                type="steam_id"
+                placeholder="Steam ID"
+              />
+              <Button {...buttonProps} onClick={() => setStep("userType")}>
+                Next
+              </Button>
+            </div>
+            <div
+              style={{
+                display: step === "userType" ? "block" : "none", // What are you here to do ??
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -390,7 +428,7 @@ const RegisterJourneyForm = (props) => {
               <br />
               <Button {...buttonProps} onClick={() => {
                 setUserType("venue")
-                setStep(6)
+                setStep("venueInfo")
               }}>
                 Register my venue
               </Button>
@@ -398,7 +436,7 @@ const RegisterJourneyForm = (props) => {
               <br />
               <Button {...buttonProps} onClick={() => {
                 setUserType("organiser")
-                setStep(13)
+                setStep("organiserInfo")
               }}>
                 Organise tournaments
               </Button>
@@ -406,14 +444,14 @@ const RegisterJourneyForm = (props) => {
               <br />
               <Button {...buttonProps} onClick={() => {
                 setUserType("gamer")
-                setStep(11)
+                setStep("gamerType")
               }}>
                 Play in tournaments
               </Button>
             </div>
             <div
               style={{
-                display: step === 6 ? "block" : "none", // Venue info
+                display: step === "venueInfo" ? "block" : "none", // Venue info
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -432,13 +470,13 @@ const RegisterJourneyForm = (props) => {
                 type="vaddress"
                 placeholder="Venue Address"
               />
-              <Button {...buttonProps} onClick={() => setStep(7)}>
+              <Button {...buttonProps} onClick={() => setStep("venuePlatforms")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 7 ? "block" : "none", // Venue platforms
+                display: step === "venuePlatforms" ? "block" : "none", // Venue platforms
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -463,13 +501,60 @@ const RegisterJourneyForm = (props) => {
                 }
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(8)}>
+              <Button {...buttonProps} onClick={() => setStep("venueGames")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 8 ? "block" : "none", // Gaming facilities
+                display: step === "venueGames" ? "block" : "none", // Venue games
+              }}
+            >
+              <Text as="h4" fontSize="3xl" color="white">
+                Games available to play
+              </Text>
+              <br />
+              <div>
+                {
+                  props.values.venuePlatforms &&
+                  props.values.venuePlatforms.length > 0 &&
+                  props.values.venuePlatforms.map(venuePlatform => {
+                    return (
+                      <div key={venuePlatform}>
+                        <Text as="h6" fontSize="xl" color="brand.900" textAlign="left">
+                          {platforms.find(item => item.id === venuePlatform).name}
+                        </Text>
+                        <div>
+                          {
+                            games &&
+                            games.length > 0 &&
+                            games.map(game => {
+                              if (game.platforms.findIndex(item => item.id === venuePlatform) === -1) return null
+                              return (
+                                <InputCheckBox
+                                  key={game.id}
+                                  name="venueGames"
+                                  value={game.id}
+                                >
+                                  {game.name}
+                                </InputCheckBox>
+                              )
+                            })
+                          }
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+              <br /> <br />
+              <Button {...buttonProps} onClick={() => setStep("venueGamingFacilities")}>
+                Next
+              </Button>
+            </div>
+            <div
+              style={{
+                display: step === "venueGamingFacilities" ? "block" : "none", // Gaming facilities
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -484,13 +569,13 @@ const RegisterJourneyForm = (props) => {
                 <InputCheckBox name="venueGamingFacilities" value="arena">Arena</InputCheckBox>
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(9)}>
+              <Button {...buttonProps} onClick={() => setStep("venueFacilities")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 9 ? "block" : "none", // Venue facilities
+                display: step === "venueFacilities" ? "block" : "none", // Venue facilities
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -503,13 +588,13 @@ const RegisterJourneyForm = (props) => {
                 <InputCheckBox name="venueFacilities" value="food">Food</InputCheckBox>
               </div>
               <br /> <br />
-              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep(10)}>
+              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep("venueThanks")}>
                 Next
               </SubmitButton>
             </div>
             <div
               style={{
-                display: step === 10 ? "block" : "none", // Venue thanks
+                display: step === "venueThanks" ? "block" : "none", // Venue thanks
               }}
             >
               <Text as="h3" fontSize="xl" color="white">
@@ -546,7 +631,7 @@ const RegisterJourneyForm = (props) => {
             </div>
             <div
               style={{
-                display: step === 11 ? "block" : "none", // Gamer looking for
+                display: step === "gamerType" ? "block" : "none", // Gamer looking for
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -559,13 +644,13 @@ const RegisterJourneyForm = (props) => {
                 <InputCheckBox name="gamerType" value="other">Other</InputCheckBox>
               </div>
               <br /> <br />
-              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep(12)}>
+              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep("gamerThanks")}>
                 Next
               </SubmitButton>
             </div>
             <div
               style={{
-                display: step === 12 ? "block" : "none", // Gamer thanks
+                display: step === "gamerThanks" ? "block" : "none", // Gamer thanks
               }}
             >
               <Text as="h3" fontSize="xl" color="white">
@@ -594,7 +679,7 @@ const RegisterJourneyForm = (props) => {
             </div>
             <div
               style={{
-                display: step === 13 ? "block" : "none", // Organiser info
+                display: step === "organiserInfo" ? "block" : "none", // Organiser info
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -611,13 +696,13 @@ const RegisterJourneyForm = (props) => {
                 type="oalias"
                 placeholder="Organiser Alias"
               />
-              <Button {...buttonProps} onClick={() => setStep(14)}>
+              <Button {...buttonProps} onClick={() => setStep("organiserPlatforms")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 14 ? "block" : "none", // Organiser platforms
+                display: step === "organiserPlatforms" ? "block" : "none", // Organiser platforms
               }}
             >
               <Text as="h4" fontSize="xl" color="white">
@@ -642,13 +727,13 @@ const RegisterJourneyForm = (props) => {
                 }
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(15)}>
+              <Button {...buttonProps} onClick={() => setStep("organiserGames")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 15 ? "block" : "none", // Organiser games
+                display: step === "organiserGames" ? "block" : "none", // Organiser games
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -673,13 +758,13 @@ const RegisterJourneyForm = (props) => {
                 }
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(16)}>
+              <Button {...buttonProps} onClick={() => setStep("organiserEquipment")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 16 ? "block" : "none", // Organiser equipment
+                display: step === "organiserEquipment" ? "block" : "none", // Organiser equipment
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -692,13 +777,13 @@ const RegisterJourneyForm = (props) => {
                 <InputCheckBox name="organiserEquipment" value="source_equip">I would like to source the equipment when I need it</InputCheckBox>
               </div>
               <br /> <br />
-              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep(17)}>
+              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep("organiserThanks")}>
                 Next
               </SubmitButton>
             </div>
             <div
               style={{
-                display: step === 17 ? "block" : "none", // Organiser thanks
+                display: step === "organiserThanks" ? "block" : "none", // Organiser thanks
               }}
             >
               <Text as="h3" fontSize="xl" color="white">
@@ -731,6 +816,7 @@ const RegisterJourneyForm = (props) => {
             </div>
           </div>
         </Form>
+        }
       </Formik>
     </>
   )
