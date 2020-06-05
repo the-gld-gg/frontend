@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/core"
 import gtmHandler from "../../utils/gtmHandler"
 import InputText from "./../../components/InputText/InputText"
+import InputSearchable from "../../components/InputSearchable/InputSearchable"
 import InputCheckBox from "./../../components/InputCheckBox/InputCheckBox"
 import SubmitButton from "./../../components/SubmitButton/SubmitButton"
 
@@ -467,7 +468,7 @@ const RegisterJourneyForm = (props) => {
                 type="vname"
                 placeholder="Venue Name"
               />
-              <InputText
+              <InputSearchable
                 label="Venue Address"
                 name="vaddress"
                 type="vaddress"
