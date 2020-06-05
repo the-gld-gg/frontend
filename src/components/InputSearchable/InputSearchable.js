@@ -1,17 +1,35 @@
 import React, { useState } from "react"
 import { useField } from "formik"
+import axios from "axios"
 import { FormControl, Input, List, ListItem } from "@chakra-ui/core"
 import ErrorMessage from "../ErrorMessage/ErrorMessage"
 import LayoutFormControl from "../../containers/LayoutFormControl/LayoutFormControl"
 import googleAutoComplete from "../../utils/googleAutoComplete"
 import styles from "./InputSearchable.module.css"
 
-const InputSearchable = ({ label, color = "brand.900", ...props }) => {
+const google = new googleAutoComplete()
+let searchResults = null
+
+const InputSearchable = ({
+    label,
+    color = "brand.900",
+    searchType = null,
+    ...props
+  }) => {
   const [field, meta] = useField(props)
   const [value, setValue] = useState("")
   const [showResults, setShowResults] = useState(false)
   const [results, setResults] = useState([])
-  const google = new googleAutoComplete()
+
+  if (searchType === "venue" && searchResults === null) {
+    axios
+      .get("https://api.thegld.gg/api/v1/venue/list")
+      .then(response => {
+        if (response && response.data.venues) {
+          searchResults = response.data.venues
+        }
+      })
+  }
 
   return (
     <LayoutFormControl>
@@ -22,14 +40,23 @@ const InputSearchable = ({ label, color = "brand.900", ...props }) => {
           value={value}
           onChange={(event) => {
             const val = event.target.value
+            setValue(val)
             if (val) {
-              setValue(val)
-              google.searchAddress(val, (response) => {
-                if (response && response.length > 0) {
+              if (searchType === "venue") {
+                if (searchResults && searchResults.length > 0) {
                   setShowResults(true)
-                  setResults(response.filter(item => item.types.includes("street_address")))
+                  setResults(searchResults.filter(item => item.name.indexOf(val) !== -1))
                 }
-              })
+              } else {
+                google.searchAddress(val, (response) => {
+                  if (response && response.length > 0) {
+                    setShowResults(true)
+                    setResults(response.filter(item => item.types.includes("street_address")))
+                  }
+                })
+              }
+            } else {
+              setShowResults(false)
             }
           }}
           {...props}
@@ -56,10 +83,10 @@ const InputSearchable = ({ label, color = "brand.900", ...props }) => {
                       color: "brand.900"
                     }}
                     onClick={() => {
-                      setValue(result.description)
+                      setValue(result.description || result.name)
                       setShowResults(false)
                     }}>
-                    {result.description}
+                    {result.description || result.name}
                   </ListItem>
                 )
               })

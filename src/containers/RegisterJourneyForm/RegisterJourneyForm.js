@@ -65,12 +65,16 @@ const RegisterJourneyForm = (props) => {
           vname: "",
           vaddress: "",
           venuePlatforms: [],
+          venueGames: [],
           venueFacilities: [],
           venueGamingFacilities: [],
           gamerType: [],
           olias: "",
           organiserPlatforms: [],
           organiserGames: [],
+          venueId: "",
+          office: "",
+          other_location: "",
           organiserEquipment: []
         }}
         onSubmit={(values, actions) => {
@@ -190,6 +194,9 @@ const RegisterJourneyForm = (props) => {
                       name: values.oalias,
                       games: values.organiserGames,
                       platforms: values.organiserPlatforms,
+                      venueId: values.organiserVenueName,
+                      office: values.organiserOffice,
+                      other_location: values.organiserOther,
                       venue_equipment: values.organiserEquipment.indexOf("venue_equipment") !== -1 ? 1 : 0,
                       byo_equipment: values.organiserEquipment.indexOf("byo_equipment") !== -1 ? 1 : 0,
                       source_equipment: values.organiserEquipment.indexOf("source_equipment") !== -1 ? 1 : 0
@@ -219,6 +226,9 @@ const RegisterJourneyForm = (props) => {
                           name: values.oalias,
                           games: values.organiserGames,
                           platforms: values.organiserPlatforms,
+                          venueId: values.organiserVenueName,
+                          office: values.organiserOffice,
+                          other_location: values.organiserOther,
                           equipment: values.organiserEquipment
                         }
                       }
@@ -762,6 +772,38 @@ const RegisterJourneyForm = (props) => {
                 }
               </div>
               <br /> <br />
+              <Button {...buttonProps} onClick={() => setStep("organiserVenue")}>
+                Next
+              </Button>
+            </div>
+            <div
+              style={{
+                display: step === "organiserVenue" ? "block" : "none", // Organiser Venue
+              }}
+            >
+              <Text as="h4" fontSize="3xl" color="white">
+                Venue Info
+              </Text>
+              <br />
+              <InputSearchable
+                label="Venue Name"
+                name="organiserVenueName"
+                type="organiserVenueName"
+                placeholder="Venue Name"
+                searchType="venue"
+              />
+              <InputText
+                label="Office Location"
+                name="organiserOffice"
+                type="organiserOffice"
+                placeholder="Office Location"
+              />
+              <InputText
+                label="Other"
+                name="organiserOther"
+                type="organiserOther"
+                placeholder="Other"
+              />
               <Button {...buttonProps} onClick={() => setStep("organiserEquipment")}>
                 Next
               </Button>
