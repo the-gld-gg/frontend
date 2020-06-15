@@ -11,6 +11,7 @@ import InputText from "./../../components/InputText/InputText"
 import InputSearchable from "../../components/InputSearchable/InputSearchable"
 import InputCheckBox from "./../../components/InputCheckBox/InputCheckBox"
 import SubmitButton from "./../../components/SubmitButton/SubmitButton"
+import { Link } from "react-router-dom"
 
 const RegisterJourneyForm = (props) => {
   const [loading, setLoading] = useState(false)
@@ -20,19 +21,28 @@ const RegisterJourneyForm = (props) => {
   const [platforms, setPlatforms] = useState([])
   const [step, setStep] = useState("aboutYou")
   const [userType, setUserType] = useState("gamer")
+  const [userProfile, setUserProfile] = useState([])
 
   useEffect(() => {
     axios.all([
       axios.get("https://api.thegld.gg/api/v1/game/list"),
       axios.get("https://api.thegld.gg/api/v1/genre/list"),
-      axios.get("https://api.thegld.gg/api/v1/platform/list")
+      axios.get("https://api.thegld.gg/api/v1/platform/list"),
+      axios({
+        method: "GET",
+        headers: {
+          "x-access-token": props.user.access_token
+        },
+        url: "https://api.thegld.gg/api/v1/user/me"
+      })
     ])
-      .then(axios.spread(function (game, genre, platform) {
+      .then(axios.spread(function (game, genre, platform, profile) {
         setGames(game.data.games)
         setGenres(genre.data.genres)
         setPlatforms(platform.data.platforms)
+        setUserProfile(profile.data.user)
       }))
-  }, [])
+  }, [props.user.access_token])
 
   if (result && result.redirect) {
     return (
@@ -51,19 +61,23 @@ const RegisterJourneyForm = (props) => {
       color: "brand.900"
     }
   }
-
+  console.log(userProfile)
   return (
     <>
       <Formik
         initialValues={{
-          games: [],
+          games: userProfile.games || [],
           genres: [],
           platforms: [],
           psn: "",
           xbox_id: "",
           steam_id: "",
+          twitch_id: "",
           vname: "",
           vaddress: "",
+          cpu: "",
+          ram: "",
+          graphic: "",
           venuePlatforms: [],
           venueGames: [],
           venueFacilities: [],
@@ -94,7 +108,8 @@ const RegisterJourneyForm = (props) => {
               platforms: values.platforms,
               psn: values.psn,
               xbox_id: values.xbox_id,
-              steam_id: values.steam_id
+              steam_id: values.steam_id,
+              twitch_id: values.twitch_id
             }
           })
             .then(response => {
@@ -135,6 +150,10 @@ const RegisterJourneyForm = (props) => {
                       address: values.vaddress,
                       games: values.venueGames,
                       platforms: values.venuePlatforms,
+                      cpu: values.cpu,
+                      ram: values.ram,
+                      graphic: values.graphic,
+                      count_pc: 10,
                       lan: values.venueGamingFacilities.indexOf("lan") !== -1 ? 1 : 0,
                       gaming_booth: values.venueGamingFacilities.indexOf("gaming_booth") !== -1 ? 1 : 0,
                       booth: values.venueGamingFacilities.indexOf("booth") !== -1 ? 1 : 0,
@@ -860,6 +879,15 @@ const RegisterJourneyForm = (props) => {
                 Home
               </Button>
             </div>
+            <br />
+            {
+              step !== "aboutYou" &&
+              step !== "userType" &&
+              step !== "gamerThanks" &&
+              step !== "venueThanks" &&
+              step !== "organiserThanks" &&
+              <Link to="/profile">Skip for now</Link>
+            }
           </div>
         </Form>
         }

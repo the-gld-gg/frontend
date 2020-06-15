@@ -5,8 +5,9 @@ import { GOOGLE_MAPS_API_KEY } from "../../configs"
 import googleAutoComplete from "../../utils/googleAutoComplete"
 import gtmHandler from "../../utils/gtmHandler"
 import Layout from "../../containers/Layout/Layout"
-import { SimpleGrid, Box, Text, List, ListItem, ListIcon, Icon } from "@chakra-ui/core"
+import { SimpleGrid, Box, Text, List, ListItem, ListIcon, Icon, Button } from "@chakra-ui/core"
 import Section from "../../components/Section/Section"
+import { Link } from "react-router-dom"
 
 const google = new googleAutoComplete()
 
@@ -114,6 +115,9 @@ class Profile extends React.Component {
                           platform.name === "XBox" && <ListIcon icon="xbox" />
                         }
                         {
+                          platform.name === "PC" && <ListIcon icon="pc" />
+                        }
+                        {
                           platform.name === "PlayStation" && <ListIcon icon="playstation" />
                         }
                         {platform.name}
@@ -134,7 +138,7 @@ class Profile extends React.Component {
                 user.venues.map(venue => {
                   let latitude = -37.8390361, longitude = 144.9997397
                   google.getPostcode(venue.address, response => {
-                    if (response[0].geometry && response[0].geometry.location) {
+                    if (response[0] && response[0].geometry && response[0].geometry.location) {
                       latitude = response[0].geometry.location.lat()
                       longitude = response[0].geometry.location.lng()
                     }
@@ -250,6 +254,23 @@ class Profile extends React.Component {
               </Box>
             </Box>
           }
+          <Box>
+            <Link to="/register-journey">
+              <Button
+                {...{
+                  color: "white",
+                  bg: "#0A154A",
+                  size: "lg",
+                  fontSize: "xl",
+                  _hover: {
+                    bg: "brand.300",
+                    color: "brand.900"
+                  }
+                }}>
+                Update profile
+              </Button>
+            </Link>
+          </Box>
         </Section>
       </Layout>
     )

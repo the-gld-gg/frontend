@@ -55,9 +55,6 @@ const App = ({ children }) => {
           <Route path="/register">
             <Register />
           </Route>
-          <Route path="/register-journey">
-            <RegisterJourney />
-          </Route>
           <Route path="/register-success">
             <RegisterSuccess />
           </Route>
@@ -70,6 +67,9 @@ const App = ({ children }) => {
           <Route exact path="/reset">
             <Reset />
           </Route>
+          <PrivateRoute exact path="/register-journey">
+            <RegisterJourney />
+          </PrivateRoute>
           <PrivateRoute exact path="/profile">
             <Profile />
           </PrivateRoute>
