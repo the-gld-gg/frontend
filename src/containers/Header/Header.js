@@ -16,7 +16,7 @@ import {
 import styles from "./Header.module.css"
 
 const Header = (props) => {
-  const [user, setUser] = useState(localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null)
+  const [user, setUser] = useState(sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : null)
   const [toastMessage, setToastMessage] = useState(undefined)
   const toast = useToast()
 
@@ -55,7 +55,7 @@ const Header = (props) => {
               <MenuItem
                 onClick={() => {
                   setUser(null)
-                  localStorage.removeItem("user")
+                  sessionStorage.removeItem("user")
                   setToastMessage({
                     title: "Logout",
                     body: "You've successfully logged out."

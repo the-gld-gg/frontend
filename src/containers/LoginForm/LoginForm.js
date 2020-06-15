@@ -59,7 +59,7 @@ const LoginForm = (props) => {
               }
 
               if (response.data && response.data.user) {
-                localStorage.setItem("user", JSON.stringify(response.data.user))
+                sessionStorage.setItem("user", JSON.stringify(response.data.user))
               }
 
               setResult({

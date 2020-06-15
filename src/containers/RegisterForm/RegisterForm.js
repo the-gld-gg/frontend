@@ -66,7 +66,7 @@ const RegisterForm = (props) => {
               }
 
               if (response.data && response.data.user) {
-                localStorage.setItem("user", JSON.stringify(response.data.user))
+                sessionStorage.setItem("user", JSON.stringify(response.data.user))
               }
 
               if (response.data && response.data.message && response.data.message === "User already exists with this email") {
@@ -76,7 +76,7 @@ const RegisterForm = (props) => {
                     password: values.password
                   }).then(response => {
                     if (response.data && response.data.user) {
-                      localStorage.setItem("user", JSON.stringify(response.data.user))
+                      sessionStorage.setItem("user", JSON.stringify(response.data.user))
                     }
                   })
               }

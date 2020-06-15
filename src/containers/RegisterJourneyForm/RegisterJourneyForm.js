@@ -79,7 +79,7 @@ const RegisterJourneyForm = (props) => {
         }}
         onSubmit={(values, actions) => {
           setLoading(true)
-          const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null
+          const user = sessionStorage.getItem("user") ? JSON.parse(sessionStorage.getItem("user")) : null
           if (!user) return
 
           axios({

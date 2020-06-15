@@ -24,9 +24,9 @@ const PrivateRoute = ({ children, ...rest }) => {
     <Route
       {...rest}
       render={({ location }) =>
-        localStorage && localStorage.getItem('user') ? (
+        sessionStorage && sessionStorage.getItem('user') ? (
           React.cloneElement(children, { 
-            user: JSON.parse(localStorage.getItem('user'))
+            user: JSON.parse(sessionStorage.getItem('user'))
           })
         ) : (
           <Redirect
