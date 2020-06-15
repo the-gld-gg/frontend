@@ -51,6 +51,7 @@ const RegisterForm = (props) => {
               email: values.email,
               password: values.password,
               password_confirmation: values.password,
+              confirmEmailUrl: "/register-journey",
               terms: true
             })
             .then(response => {
@@ -63,11 +64,29 @@ const RegisterForm = (props) => {
                   status: "error"
                 })
               }
+
+              if (response.data && response.data.user) {
+                localStorage.setItem("user", JSON.stringify(response.data.user))
+              }
+
+              if (response.data && response.data.message && response.data.message === "User already exists with this email") {
+                axios
+                  .post("https://api.thegld.gg/api/v1/user/login", {
+                    email: values.email,
+                    password: values.password
+                  }).then(response => {
+                    if (response.data && response.data.user) {
+                      localStorage.setItem("user", JSON.stringify(response.data.user))
+                    }
+                  })
+              }
+
               setResult({
                 messages: ["You have successfully registered."],
                 status: "success",
                 redirect: "/register-journey" // register-success
               })
+
               gtmHandler({
                 event: "registration success",
                 eventType: "form_response",

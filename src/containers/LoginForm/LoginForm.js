@@ -41,47 +41,47 @@ const LoginForm = (props) => {
         })}
         onSubmit={(values, actions) => {
           setLoading(true)
-          setTimeout(() => {
-            axios
-              .post("https://api.thegld.gg/api/v1/user/login", {
-                email: values.email,
-                password: values.password
-              })
-              .then(response => {
-                actions.setSubmitting(false)
-                setLoading(false)
+          axios
+            .post("https://api.thegld.gg/api/v1/user/login", {
+              email: values.email,
+              password: values.password
+            })
+            .then(response => {
+              actions.setSubmitting(false)
+              setLoading(false)
 
-                if (response.data.error) {
-                  setResult({
-                    messages: Object.values(response.data.data).map(item => item[0]),
-                    status: "error"
-                  })
-                  return
-                }
-
-                localStorage.setItem("user", JSON.stringify(response.data.data))
-
+              if (response.data.error) {
                 setResult({
-                  messages: ["You have successfully logged in."],
-                  status: "success",
-                  redirect: "/profile"
-                })
-                gtmHandler({
-                  event: "login success",
-                  eventType: "form_response",
-                  category: {
-                    primaryCategory: "form interaction",
-                    subCategory: props.gtm.subCategory
-                  }
-                })
-              })
-              .catch(error => {
-                setResult({
-                  messages: ["Something went wrong."],
+                  messages: Object.values(response.data.data).map(item => item[0]),
                   status: "error"
                 })
+                return
+              }
+
+              if (response.data && response.data.user) {
+                localStorage.setItem("user", JSON.stringify(response.data.user))
+              }
+
+              setResult({
+                messages: ["You have successfully logged in."],
+                status: "success",
+                redirect: "/profile"
               })
-          }, 2000)
+              gtmHandler({
+                event: "login success",
+                eventType: "form_response",
+                category: {
+                  primaryCategory: "form interaction",
+                  subCategory: props.gtm.subCategory
+                }
+              })
+            })
+            .catch(error => {
+              setResult({
+                messages: ["Something went wrong."],
+                status: "error"
+              })
+            })
         }}
       >
         <Form>

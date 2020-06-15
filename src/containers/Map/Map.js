@@ -1,6 +1,7 @@
 import React from 'react'
 import GoogleMap from "google-map-react"
 import googleMapLoader from "google-map-react/lib/loaders/google_map_loader"
+import { GOOGLE_MAPS_API_KEY } from "../../configs"
 import { Box, Text, SimpleGrid, Icon } from "@chakra-ui/core"
 
 const Map = () => (
@@ -26,7 +27,7 @@ const Map = () => (
       <Box minHeight="70vh">
         <GoogleMap
           resetBoundsOnResize
-          bootstrapURLKeys={{ key: "AIzaSyB6Jp61V5BnicXEcprtzV0IldSH3fKdP6c" }}
+          bootstrapURLKeys={{ key: GOOGLE_MAPS_API_KEY }}
           defaultCenter = {{
             lat: -37.8390361,
             lng: 144.9997397

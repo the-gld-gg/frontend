@@ -8,6 +8,7 @@ import {
 } from "@chakra-ui/core"
 import gtmHandler from "../../utils/gtmHandler"
 import InputText from "./../../components/InputText/InputText"
+import InputSearchable from "../../components/InputSearchable/InputSearchable"
 import InputCheckBox from "./../../components/InputCheckBox/InputCheckBox"
 import SubmitButton from "./../../components/SubmitButton/SubmitButton"
 
@@ -15,18 +16,22 @@ const RegisterJourneyForm = (props) => {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
   const [games, setGames] = useState([])
-  const [step, setStep] = useState(1)
+  const [genres, setGenres] = useState([])
+  const [platforms, setPlatforms] = useState([])
+  const [step, setStep] = useState("aboutYou")
   const [userType, setUserType] = useState("gamer")
 
   useEffect(() => {
-    axios
-      .get("https://api.thegld.gg/api/v1/game/list")
-      .then(response => {
-        setGames(response.data.games)
-      })
-      .catch(error => {
-        console.log('error in fetching games', error)
-      })
+    axios.all([
+      axios.get("https://api.thegld.gg/api/v1/game/list"),
+      axios.get("https://api.thegld.gg/api/v1/genre/list"),
+      axios.get("https://api.thegld.gg/api/v1/platform/list")
+    ])
+      .then(axios.spread(function (game, genre, platform) {
+        setGames(game.data.games)
+        setGenres(genre.data.genres)
+        setPlatforms(platform.data.platforms)
+      }))
   }, [])
 
   if (result && result.redirect) {
@@ -54,45 +59,224 @@ const RegisterJourneyForm = (props) => {
           games: [],
           genres: [],
           platforms: [],
+          psn: "",
+          xbox_id: "",
+          steam_id: "",
           vname: "",
           vaddress: "",
           venuePlatforms: [],
+          venueGames: [],
           venueFacilities: [],
           venueGamingFacilities: [],
-          gamerType: "",
+          gamerType: [],
+          olias: "",
           organiserPlatforms: [],
           organiserGames: [],
+          venueId: "",
+          office: "",
+          other_location: "",
           organiserEquipment: []
         }}
         onSubmit={(values, actions) => {
           setLoading(true)
-          axios
-            .post("https://api.thegld.gg/api/v1/user/register-journey", {
-              userType,
-              values
-            })
-            .then(response => {
-              actions.setSubmitting(false)
-              setLoading(false)
+          const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null
+          if (!user) return
 
+          axios({
+            method: "POST",
+            headers: {
+              "x-access-token": user.access_token
+            },
+            url: "https://api.thegld.gg/api/v1/user/profile",
+            data: {
+              games: values.games,
+              genres: values.genres,
+              platforms: values.platforms,
+              psn: values.psn,
+              xbox_id: values.xbox_id,
+              steam_id: values.steam_id
+            }
+          })
+            .then(response => {
               if (response.data.error) {
                 setResult({
                   messages: Object.values(response.data.data).map(item => item[0]),
                   status: "error"
                 })
               }
-              setResult({
-                messages: ["You have successfully registered."],
-                status: "success"
-              })
+
               gtmHandler({
-                event: "registration journey success",
+                event: "registration journey profile success",
                 eventType: "form_response",
                 category: {
                   primaryCategory: "form interaction",
                   subCategory: props.gtm.subCategory
+                },
+                additionalProps: {
+                  games: values.games,
+                  genres: values.genres,
+                  platforms: values.platforms,
+                  psn: values.psn,
+                  xbox_id: values.xbox_id,
+                  steam_id: values.steam_id
                 }
               })
+
+              if (userType === "venue") {
+                axios({
+                  method: "POST",
+                  headers: {
+                    "x-access-token": user.access_token
+                  },
+                  url: "https://api.thegld.gg/api/v1/user/profile/venue-flow",
+                  data: {
+                    venue: {
+                      name: values.vname,
+                      address: values.vaddress,
+                      games: values.venueGames,
+                      platforms: values.venuePlatforms,
+                      lan: values.venueGamingFacilities.indexOf("lan") !== -1 ? 1 : 0,
+                      gaming_booth: values.venueGamingFacilities.indexOf("gaming_booth") !== -1 ? 1 : 0,
+                      booth: values.venueGamingFacilities.indexOf("booth") !== -1 ? 1 : 0,
+                      tv_screens: values.venueGamingFacilities.indexOf("tv_screens") !== -1 ? 1 : 0,
+                      arena: values.venueGamingFacilities.indexOf("arena") !== -1 ? 1 : 0,
+                      soft_drinks: values.venueFacilities.indexOf("soft_drinks") !== -1 ? 1 : 0,
+                      alchohol: values.venueFacilities.indexOf("alchohol") !== -1 ? 1 : 0,
+                      food: values.venueFacilities.indexOf("food") !== -1 ? 1 : 0
+                    }
+                  }
+                })
+                  .then(response => {
+                    actions.setSubmitting(false)
+                    setLoading(false)
+
+                    if (response.data.error) {
+                      setResult({
+                        messages: Object.values(response.data.data).map(item => item[0]),
+                        status: "error"
+                      })
+                    }
+
+                    gtmHandler({
+                      event: "registration journey profile venue success",
+                      eventType: "form_response",
+                      category: {
+                        primaryCategory: "form interaction",
+                        subCategory: props.gtm.subCategory
+                      },
+                      additionalProps: {
+                        venue: {
+                          name: values.vname,
+                          address: values.vaddress,
+                          games: values.venueGames,
+                          platforms: values.venuePlatforms,
+                          gamingFacilities: values.venueGamingFacilities,
+                          facilities: values.venueFacilities
+                        }
+                      }
+                    })
+                  })
+                  .catch(error => {
+                    setResult({
+                      messages: ["Something went wrong."],
+                      status: "error"
+                    })
+                  })
+              } else if (userType === "organiser") {
+                axios({
+                  method: "POST",
+                  headers: {
+                    "x-access-token": user.access_token
+                  },
+                  url: "https://api.thegld.gg/api/v1/user/profile/organiser-flow",
+                  data: {
+                    organiser: {
+                      name: values.oalias,
+                      games: values.organiserGames,
+                      platforms: values.organiserPlatforms,
+                      venueId: values.organiserVenueName,
+                      office: values.organiserOffice,
+                      other_location: values.organiserOther,
+                      venue_equipment: values.organiserEquipment.indexOf("venue_equipment") !== -1 ? 1 : 0,
+                      byo_equipment: values.organiserEquipment.indexOf("byo_equipment") !== -1 ? 1 : 0,
+                      source_equipment: values.organiserEquipment.indexOf("source_equipment") !== -1 ? 1 : 0
+                    }
+                  }
+                })
+                  .then(response => {
+                    actions.setSubmitting(false)
+                    setLoading(false)
+
+                    if (response.data.error) {
+                      setResult({
+                        messages: Object.values(response.data.data).map(item => item[0]),
+                        status: "error"
+                      })
+                    }
+
+                    gtmHandler({
+                      event: "registration journey profile organiser success",
+                      eventType: "form_response",
+                      category: {
+                        primaryCategory: "form interaction",
+                        subCategory: props.gtm.subCategory
+                      },
+                      additionalProps: {
+                        organiser: {
+                          name: values.oalias,
+                          games: values.organiserGames,
+                          platforms: values.organiserPlatforms,
+                          venueId: values.organiserVenueName,
+                          office: values.organiserOffice,
+                          other_location: values.organiserOther,
+                          equipment: values.organiserEquipment
+                        }
+                      }
+                    })
+                  })
+                  .catch(error => {
+                    setResult({
+                      messages: ["Something went wrong."],
+                      status: "error"
+                    })
+                  })
+              } else if (userType === "gamer") {
+                axios
+                  .post("https://api.thegld.gg/api/v1/user/profile/user-flow", {
+                    social: values.gamerType.indexOf("social") !== -1 ? 1 : 0,
+                    competitive: values.gamerType.indexOf("competitive") !== -1 ? 1 : 0,
+                    other: values.gamerType.indexOf("other") !== -1 ? 1 : 0
+                  })
+                  .then(response => {
+                    actions.setSubmitting(false)
+                    setLoading(false)
+
+                    if (response.data.error) {
+                      setResult({
+                        messages: Object.values(response.data.data).map(item => item[0]),
+                        status: "error"
+                      })
+                    }
+
+                    gtmHandler({
+                      event: "registration journey profile gamer success",
+                      eventType: "form_response",
+                      category: {
+                        primaryCategory: "form interaction",
+                        subCategory: props.gtm.subCategory
+                      },
+                      additionalProps: {
+                        gamerType: values.gamerType
+                      }
+                    })
+                  })
+                  .catch(error => {
+                    setResult({
+                      messages: ["Something went wrong."],
+                      status: "error"
+                    })
+                  })
+              }
             })
             .catch(error => {
               setResult({
@@ -101,30 +285,31 @@ const RegisterJourneyForm = (props) => {
               })
             })
         }}        
-      >
+      >{
+        props =>
         <Form>
           <div style={{ width: "375px", maxWidth: "100%", margin: "0 auto" }}>
             <div
               style={{
-                display: step === 1 ? "block" : "none", // A little bit about yourself
+                display: step === "aboutYou" ? "block" : "none", // A little bit about yourself
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
                 First, a bit about yourself
               </Text>
               <br />
-              <Button {...buttonProps} onClick={() => setStep(2)}>
+              <Button {...buttonProps} onClick={() => setStep("platforms")}>
                 Next
               </Button>
               <br />
               <br />
-              <Button {...buttonProps} onClick={() => setStep(12)}>
+              <Button {...buttonProps} onClick={() => setStep("gamerThanks")}>
                 Add later
               </Button>
             </div>
             <div
               style={{
-                display: step === 2 ? "block" : "none", // Preferred platforms
+                display: step === "platforms" ? "block" : "none", // Preferred platforms
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -132,21 +317,30 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="platforms" value="pc">PC</InputCheckBox>
-                <InputCheckBox name="platforms" value="ps4">PS4</InputCheckBox>
-                <InputCheckBox name="platforms" value="xbox">XBox</InputCheckBox>
-                <InputCheckBox name="platforms" value="nintendo">Nintendo</InputCheckBox>
-                <InputCheckBox name="platforms" value="mobile">Mobile</InputCheckBox>
-                <InputCheckBox name="platforms" value="arcade">Arcade</InputCheckBox>
+                {
+                  platforms &&
+                  platforms.length > 0 &&
+                  platforms.map(platform => {
+                    return (
+                      <InputCheckBox
+                        key={platform.id}
+                        name="platforms"
+                        value={platform.id}
+                      >
+                        {platform.name}
+                      </InputCheckBox>
+                    )
+                  })
+                }
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(3)}>
+              <Button {...buttonProps} onClick={() => setStep("genres")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 3 ? "block" : "none", // Favourite genres
+                display: step === "genres" ? "block" : "none", // Favourite genres
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -154,19 +348,30 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="genres" value="rts">Real Time Strategy</InputCheckBox>
-                <InputCheckBox name="genres" value="fps">First Person Shooter</InputCheckBox>
-                <InputCheckBox name="genres" value="sports">Sports</InputCheckBox>
-                <InputCheckBox name="genres" value="multiplayer">Multiplayer</InputCheckBox>
+                {
+                  genres &&
+                  genres.length > 0 &&
+                  genres.map(genre => {
+                    return (
+                      <InputCheckBox
+                        key={genre.id}
+                        name="genres"
+                        value={genre.id}
+                      >
+                        {genre.name}
+                      </InputCheckBox>
+                    )
+                  })
+                }
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(4)}>
+              <Button {...buttonProps} onClick={() => setStep("games")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 4 ? "block" : "none", // Favourite games
+                display: step === "games" ? "block" : "none", // Favourite games
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -174,21 +379,61 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="games" value="lol">League of Legends</InputCheckBox>
-                <InputCheckBox name="games" value="dota2">DOTA2</InputCheckBox>
-                <InputCheckBox name="games" value="cod">Call of Duty</InputCheckBox>
-                <InputCheckBox name="games" value="overwatch">Overwatch</InputCheckBox>
-                <InputCheckBox name="games" value="hots">Heroes of the storm</InputCheckBox>
-                <InputCheckBox name="games" value="csgo">CS:GO</InputCheckBox>
+                {
+                  games &&
+                  games.length > 0 &&
+                  games.map(game => {
+                    return (
+                      <InputCheckBox
+                        key={game.id}
+                        name="games"
+                        value={game.id}
+                      >
+                        {game.name}
+                      </InputCheckBox>
+                    )
+                  })
+                }
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(5)}>
+              <Button {...buttonProps} onClick={() => setStep("gamerTags")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 5 ? "block" : "none", // What are you here to do ??
+                display: step === "gamerTags" ? "block" : "none", // Gamer tags
+              }}
+            >
+              <Text as="h4" fontSize="3xl" color="white">
+                Add your gamer tags for more visibility
+              </Text>
+              <br />
+              <InputText
+                label="PlayStation Network"
+                name="psn"
+                type="psn"
+                placeholder="PlayStation Network"
+              />
+              <InputText
+                label="XBox Live"
+                name="xbox_id"
+                type="xbox_id"
+                placeholder="XBox Live"
+              />
+              <InputText
+                label="Steam ID"
+                name="steam_id"
+                type="steam_id"
+                placeholder="Steam ID"
+              />
+              <Button {...buttonProps} onClick={() => setStep("userType")}>
+                Next
+              </Button>
+            </div>
+            <div
+              style={{
+                display: step === "userType" ? "block" : "none", // What are you here to do ??
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -197,7 +442,7 @@ const RegisterJourneyForm = (props) => {
               <br />
               <Button {...buttonProps} onClick={() => {
                 setUserType("venue")
-                setStep(6)
+                setStep("venueInfo")
               }}>
                 Register my venue
               </Button>
@@ -205,7 +450,7 @@ const RegisterJourneyForm = (props) => {
               <br />
               <Button {...buttonProps} onClick={() => {
                 setUserType("organiser")
-                setStep(13)
+                setStep("organiserInfo")
               }}>
                 Organise tournaments
               </Button>
@@ -213,14 +458,14 @@ const RegisterJourneyForm = (props) => {
               <br />
               <Button {...buttonProps} onClick={() => {
                 setUserType("gamer")
-                setStep(11)
+                setStep("gamerType")
               }}>
                 Play in tournaments
               </Button>
             </div>
             <div
               style={{
-                display: step === 6 ? "block" : "none", // Venue info
+                display: step === "venueInfo" ? "block" : "none", // Venue info
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -233,19 +478,19 @@ const RegisterJourneyForm = (props) => {
                 type="vname"
                 placeholder="Venue Name"
               />
-              <InputText
+              <InputSearchable
                 label="Venue Address"
                 name="vaddress"
                 type="vaddress"
                 placeholder="Venue Address"
               />
-              <Button {...buttonProps} onClick={() => setStep(7)}>
+              <Button {...buttonProps} onClick={() => setStep("venuePlatforms")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 7 ? "block" : "none", // Venue platforms
+                display: step === "venuePlatforms" ? "block" : "none", // Venue platforms
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -253,21 +498,77 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="venuePlatforms" value="pc">PC</InputCheckBox>
-                <InputCheckBox name="venuePlatforms" value="ps4">PS4</InputCheckBox>
-                <InputCheckBox name="venuePlatforms" value="xbox">XBox</InputCheckBox>
-                <InputCheckBox name="venuePlatforms" value="nintendo">Nintendo</InputCheckBox>
-                <InputCheckBox name="venuePlatforms" value="mobile">Mobile</InputCheckBox>
-                <InputCheckBox name="venuePlatforms" value="arcade">Arcade</InputCheckBox>
+                {
+                  platforms &&
+                  platforms.length > 0 &&
+                  platforms.map(platform => {
+                    return (
+                      <InputCheckBox
+                        key={platform.id}
+                        name="venuePlatforms"
+                        value={platform.id}
+                      >
+                        {platform.name}
+                      </InputCheckBox>
+                    )
+                  })
+                }
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(8)}>
+              <Button {...buttonProps} onClick={() => setStep("venueGames")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 8 ? "block" : "none", // Gaming facilities
+                display: step === "venueGames" ? "block" : "none", // Venue games
+              }}
+            >
+              <Text as="h4" fontSize="3xl" color="white">
+                Games available to play
+              </Text>
+              <br />
+              <div>
+                {
+                  props.values.venuePlatforms &&
+                  props.values.venuePlatforms.length > 0 &&
+                  props.values.venuePlatforms.map(venuePlatform => {
+                    return (
+                      <div key={venuePlatform}>
+                        <Text as="h6" fontSize="xl" color="brand.900" textAlign="left">
+                          {platforms.find(item => item.id === venuePlatform).name}
+                        </Text>
+                        <div>
+                          {
+                            games &&
+                            games.length > 0 &&
+                            games.map(game => {
+                              if (game.platforms.findIndex(item => item.id === venuePlatform) === -1) return null
+                              return (
+                                <InputCheckBox
+                                  key={game.id}
+                                  name="venueGames"
+                                  value={game.id}
+                                >
+                                  {game.name}
+                                </InputCheckBox>
+                              )
+                            })
+                          }
+                        </div>
+                      </div>
+                    )
+                  })
+                }
+              </div>
+              <br /> <br />
+              <Button {...buttonProps} onClick={() => setStep("venueGamingFacilities")}>
+                Next
+              </Button>
+            </div>
+            <div
+              style={{
+                display: step === "venueGamingFacilities" ? "block" : "none", // Gaming facilities
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -276,19 +577,19 @@ const RegisterJourneyForm = (props) => {
               <br />
               <div>
                 <InputCheckBox name="venueGamingFacilities" value="lan">LAN</InputCheckBox>
-                <InputCheckBox name="venueGamingFacilities" value="pgb">Private Gaming Booths</InputCheckBox>
+                <InputCheckBox name="venueGamingFacilities" value="gaming_booth">Private Gaming Booths</InputCheckBox>
                 <InputCheckBox name="venueGamingFacilities" value="booth">Private booth</InputCheckBox>
-                <InputCheckBox name="venueGamingFacilities" value="stream">TV screens / streams</InputCheckBox>
+                <InputCheckBox name="venueGamingFacilities" value="tv_screens">TV screens / streams</InputCheckBox>
                 <InputCheckBox name="venueGamingFacilities" value="arena">Arena</InputCheckBox>
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(9)}>
+              <Button {...buttonProps} onClick={() => setStep("venueFacilities")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 9 ? "block" : "none", // Venue facilities
+                display: step === "venueFacilities" ? "block" : "none", // Venue facilities
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -296,18 +597,18 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="venueFacilities" value="sd">Soft drinks</InputCheckBox>
-                <InputCheckBox name="venueFacilities" value="ad">Alcoholic drinks</InputCheckBox>
+                <InputCheckBox name="venueFacilities" value="soft_drinks">Soft drinks</InputCheckBox>
+                <InputCheckBox name="venueFacilities" value="alchohol">Alcoholic drinks</InputCheckBox>
                 <InputCheckBox name="venueFacilities" value="food">Food</InputCheckBox>
               </div>
               <br /> <br />
-              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep(10)}>
+              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep("venueThanks")}>
                 Next
               </SubmitButton>
             </div>
             <div
               style={{
-                display: step === 10 ? "block" : "none", // Venue thanks
+                display: step === "venueThanks" ? "block" : "none", // Venue thanks
               }}
             >
               <Text as="h3" fontSize="xl" color="white">
@@ -344,7 +645,7 @@ const RegisterJourneyForm = (props) => {
             </div>
             <div
               style={{
-                display: step === 11 ? "block" : "none", // Gamer looking for
+                display: step === "gamerType" ? "block" : "none", // Gamer looking for
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -353,17 +654,17 @@ const RegisterJourneyForm = (props) => {
               <br />
               <div>
                 <InputCheckBox name="gamerType" value="social">Play socially</InputCheckBox>
-                <InputCheckBox name="gamerType" value="comp">Play competitively</InputCheckBox>
+                <InputCheckBox name="gamerType" value="competitive">Play competitively</InputCheckBox>
                 <InputCheckBox name="gamerType" value="other">Other</InputCheckBox>
               </div>
               <br /> <br />
-              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep(12)}>
+              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep("gamerThanks")}>
                 Next
               </SubmitButton>
             </div>
             <div
               style={{
-                display: step === 12 ? "block" : "none", // Gamer thanks
+                display: step === "gamerThanks" ? "block" : "none", // Gamer thanks
               }}
             >
               <Text as="h3" fontSize="xl" color="white">
@@ -392,7 +693,7 @@ const RegisterJourneyForm = (props) => {
             </div>
             <div
               style={{
-                display: step === 13 ? "block" : "none", // Organiser info
+                display: step === "organiserInfo" ? "block" : "none", // Organiser info
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -409,13 +710,13 @@ const RegisterJourneyForm = (props) => {
                 type="oalias"
                 placeholder="Organiser Alias"
               />
-              <Button {...buttonProps} onClick={() => setStep(14)}>
+              <Button {...buttonProps} onClick={() => setStep("organiserPlatforms")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 14 ? "block" : "none", // Organiser platforms
+                display: step === "organiserPlatforms" ? "block" : "none", // Organiser platforms
               }}
             >
               <Text as="h4" fontSize="xl" color="white">
@@ -423,21 +724,30 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="organiserPlatforms" value="pc">PC</InputCheckBox>
-                <InputCheckBox name="organiserPlatforms" value="ps4">PS4</InputCheckBox>
-                <InputCheckBox name="organiserPlatforms" value="xbox">XBox</InputCheckBox>
-                <InputCheckBox name="organiserPlatforms" value="nintendo">Nintendo</InputCheckBox>
-                <InputCheckBox name="organiserPlatforms" value="mobile">Mobile</InputCheckBox>
-                <InputCheckBox name="organiserPlatforms" value="arcade">Arcade</InputCheckBox>
+                {
+                  platforms &&
+                  platforms.length > 0 &&
+                  platforms.map(platform => {
+                    return (
+                      <InputCheckBox
+                        key={platform.id}
+                        name="organiserPlatforms"
+                        value={platform.id}
+                      >
+                        {platform.name}
+                      </InputCheckBox>
+                    )
+                  })
+                }
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(15)}>
+              <Button {...buttonProps} onClick={() => setStep("organiserGames")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 15 ? "block" : "none", // Organiser games
+                display: step === "organiserGames" ? "block" : "none", // Organiser games
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -445,21 +755,62 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="organiserGames" value="lol">League of Legends</InputCheckBox>
-                <InputCheckBox name="organiserGames" value="dota2">DOTA2</InputCheckBox>
-                <InputCheckBox name="organiserGames" value="cod">Call of Duty</InputCheckBox>
-                <InputCheckBox name="organiserGames" value="overwatch">Overwatch</InputCheckBox>
-                <InputCheckBox name="organiserGames" value="hots">Heroes of the storm</InputCheckBox>
-                <InputCheckBox name="organiserGames" value="csgo">CS:GO</InputCheckBox>
+                {
+                  games &&
+                  games.length > 0 &&
+                  games.map(game => {
+                    return (
+                      <InputCheckBox
+                        key={game.id}
+                        name="organiserGames"
+                        value={game.id}
+                      >
+                        {game.name}
+                      </InputCheckBox>
+                    )
+                  })
+                }
               </div>
               <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(16)}>
+              <Button {...buttonProps} onClick={() => setStep("organiserVenue")}>
                 Next
               </Button>
             </div>
             <div
               style={{
-                display: step === 16 ? "block" : "none", // Organiser equipment
+                display: step === "organiserVenue" ? "block" : "none", // Organiser Venue
+              }}
+            >
+              <Text as="h4" fontSize="3xl" color="white">
+                Venue Info
+              </Text>
+              <br />
+              <InputSearchable
+                label="Venue Name"
+                name="organiserVenueName"
+                type="organiserVenueName"
+                placeholder="Venue Name"
+                searchType="venue"
+              />
+              <InputText
+                label="Office Location"
+                name="organiserOffice"
+                type="organiserOffice"
+                placeholder="Office Location"
+              />
+              <InputText
+                label="Other"
+                name="organiserOther"
+                type="organiserOther"
+                placeholder="Other"
+              />
+              <Button {...buttonProps} onClick={() => setStep("organiserEquipment")}>
+                Next
+              </Button>
+            </div>
+            <div
+              style={{
+                display: step === "organiserEquipment" ? "block" : "none", // Organiser equipment
               }}
             >
               <Text as="h4" fontSize="3xl" color="white">
@@ -467,18 +818,18 @@ const RegisterJourneyForm = (props) => {
               </Text>
               <br />
               <div>
-                <InputCheckBox name="organiserEquipment" value="vEquip">Venue equipment</InputCheckBox>
-                <InputCheckBox name="organiserEquipment" value="byoEquip">BYO equipment</InputCheckBox>
-                <InputCheckBox name="organiserEquipment" value="sourceEquip">I would like to source the equipment when I need it</InputCheckBox>
+                <InputCheckBox name="organiserEquipment" value="venue_equipment">Venue equipment</InputCheckBox>
+                <InputCheckBox name="organiserEquipment" value="byo_equip">BYO equipment</InputCheckBox>
+                <InputCheckBox name="organiserEquipment" value="source_equip">I would like to source the equipment when I need it</InputCheckBox>
               </div>
               <br /> <br />
-              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep(17)}>
+              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep("organiserThanks")}>
                 Next
               </SubmitButton>
             </div>
             <div
               style={{
-                display: step === 17 ? "block" : "none", // Organiser thanks
+                display: step === "organiserThanks" ? "block" : "none", // Organiser thanks
               }}
             >
               <Text as="h3" fontSize="xl" color="white">
@@ -511,6 +862,7 @@ const RegisterJourneyForm = (props) => {
             </div>
           </div>
         </Form>
+        }
       </Formik>
     </>
   )
