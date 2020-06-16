@@ -61,7 +61,7 @@ const RegisterJourneyForm = (props) => {
       color: "brand.900"
     }
   }
-  console.log(userProfile)
+
   return (
     <>
       <Formik
@@ -495,6 +495,8 @@ const RegisterJourneyForm = (props) => {
                 label="Venue Name"
                 name="vname"
                 type="vname"
+                formProps={props}
+                defaultValue={userProfile && userProfile.venues && userProfile.venues[0].name}
                 placeholder="Venue Name"
               />
               <InputSearchable
