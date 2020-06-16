@@ -62,19 +62,21 @@ const RegisterJourneyForm = (props) => {
     }
   }
 
+  if (!userProfile || !userProfile.profile) return <div />
+
   return (
     <>
       <Formik
         initialValues={{
           games: userProfile.games || [],
-          genres: [],
-          platforms: [],
-          psn: "",
-          xbox_id: "",
-          steam_id: "",
-          twitch_id: "",
-          vname: "",
-          vaddress: "",
+          genres: userProfile.genres || [],
+          platforms: userProfile.platforms || [],
+          psn: userProfile.profile && userProfile.profile.psn ? userProfile.profile.psn : "",
+          xbox_id: userProfile.profile && userProfile.profile.xbox_id ? userProfile.profile.xbox_id : "",
+          steam_id: userProfile.profile && userProfile.profile.steam_id ? userProfile.profile.steam_id : "",
+          twitch_id: userProfile.profile && userProfile.profile.twitch_id ? userProfile.profile.twitch_id : "",
+          vname: userProfile.venues && userProfile.venues[0] && userProfile.venues[0].name ? userProfile.venues[0].name : "",
+          vaddress: userProfile.venues && userProfile.venues[0] && userProfile.venues[0].address ? userProfile.venues[0].address : "",
           cpu: "",
           ram: "",
           graphic: "",
@@ -83,7 +85,7 @@ const RegisterJourneyForm = (props) => {
           venueFacilities: [],
           venueGamingFacilities: [],
           gamerType: [],
-          olias: "",
+          olias: userProfile.organiser && userProfile.organiser.name ? userProfile.organiser.name : "",
           organiserPlatforms: [],
           organiserGames: [],
           venueId: "",
@@ -495,8 +497,6 @@ const RegisterJourneyForm = (props) => {
                 label="Venue Name"
                 name="vname"
                 type="vname"
-                formProps={props}
-                defaultValue={userProfile && userProfile.venues && userProfile.venues[0].name}
                 placeholder="Venue Name"
               />
               <InputSearchable
@@ -729,6 +729,8 @@ const RegisterJourneyForm = (props) => {
                 label="Organiser Alias"
                 name="oalias"
                 type="oalias"
+                formProps={props}
+                defaultValue={userProfile && userProfile.organiser && userProfile.organiser.name}
                 placeholder="Organiser Alias"
               />
               <Button {...buttonProps} onClick={() => setStep("organiserPlatforms")}>
@@ -817,6 +819,8 @@ const RegisterJourneyForm = (props) => {
                 label="Office Location"
                 name="organiserOffice"
                 type="organiserOffice"
+                formProps={props}
+                defaultValue={userProfile && userProfile.organiser && userProfile.organiser.office}
                 placeholder="Office Location"
               />
               <InputText

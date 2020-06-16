@@ -1,20 +1,16 @@
-import React, { useEffect } from 'react'
+import React from "react"
 import { useField } from "formik";
 import { FormControl, Input } from "@chakra-ui/core"
-import ErrorMessage from '../ErrorMessage/ErrorMessage'
-import LayoutFormControl from '../../containers/LayoutFormControl/LayoutFormControl'
+import ErrorMessage from "../ErrorMessage/ErrorMessage"
+import LayoutFormControl from "../../containers/LayoutFormControl/LayoutFormControl"
 import styles from "./InputText.module.css"
 
-const InputText = ({ label, color = "brand.900", defaultValue, ...props }) => {
+const InputText = ({
+    label,
+    color = "brand.900",
+    ...props
+  }) => {
   const [field, meta] = useField(props);
-  
-  useEffect(()=> {
-    if (defaultValue){
-      props.formProps.setValues({
-        vname: defaultValue,
-      });
-    }
-  },[defaultValue])
   
   return (
     <LayoutFormControl>
@@ -27,7 +23,7 @@ const InputText = ({ label, color = "brand.900", defaultValue, ...props }) => {
         ) : null}
       </FormControl>
     </LayoutFormControl>
-  );
-};
+  )
+}
 
 export default InputText
