@@ -68,9 +68,9 @@ const RegisterJourneyForm = (props) => {
     <>
       <Formik
         initialValues={{
-          games: userProfile.games || [],
-          genres: userProfile.genres || [],
-          platforms: userProfile.platforms || [],
+          games: userProfile.games && userProfile.games.length > 0 ? userProfile.games.map(item => item.id) : [],
+          genres: userProfile.genres && userProfile.genres.length > 0 ? userProfile.genres.map(item => item.id) : [],
+          platforms: userProfile.platforms && userProfile.platforms.length > 0 ? userProfile.platforms.map(item => item.id) : [],
           psn: userProfile.profile && userProfile.profile.psn ? userProfile.profile.psn : "",
           xbox_id: userProfile.profile && userProfile.profile.xbox_id ? userProfile.profile.xbox_id : "",
           steam_id: userProfile.profile && userProfile.profile.steam_id ? userProfile.profile.steam_id : "",
@@ -434,18 +434,21 @@ const RegisterJourneyForm = (props) => {
                 label="PlayStation Network"
                 name="psn"
                 type="psn"
+                icon="playstation"
                 placeholder="PlayStation Network"
               />
               <InputText
                 label="XBox Live"
                 name="xbox_id"
                 type="xbox_id"
+                icon="xbox"
                 placeholder="XBox Live"
               />
               <InputText
                 label="Steam ID"
                 name="steam_id"
                 type="steam_id"
+                icon="steam"
                 placeholder="Steam ID"
               />
               <Button {...buttonProps} onClick={() => setStep("userType")}>
@@ -503,6 +506,7 @@ const RegisterJourneyForm = (props) => {
                 label="Venue Address"
                 name="vaddress"
                 type="vaddress"
+                formProps={props}
                 placeholder="Venue Address"
               />
               <Button {...buttonProps} onClick={() => setStep("venuePlatforms")}>

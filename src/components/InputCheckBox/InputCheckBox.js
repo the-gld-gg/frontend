@@ -1,11 +1,11 @@
-import React from 'react'
-import { useField } from "formik";
+import React from "react"
+import { useField } from "formik"
 import {
   FormControl,
-} from "@chakra-ui/core";
-import { Checkbox } from "@chakra-ui/core";
-import ErrorMessage from '../ErrorMessage/ErrorMessage'
-import LayoutFormControl from '../../containers/LayoutFormControl/LayoutFormControl'
+} from "@chakra-ui/core"
+import { Checkbox } from "@chakra-ui/core"
+import ErrorMessage from "../ErrorMessage/ErrorMessage"
+import LayoutFormControl from "../../containers/LayoutFormControl/LayoutFormControl"
 
 const InputCheckBox = ({
   variantColor = "blue",
@@ -16,7 +16,7 @@ const InputCheckBox = ({
   textAlign = "left",
   ...props
 }) => {
-  const [field, meta] = useField(props);
+  const [field, meta] = useField(props)
 
   return (
     <LayoutFormControl>
@@ -28,6 +28,7 @@ const InputCheckBox = ({
           color={color}
           fontWeight={fontWeight}
           textAlign={textAlign}
+          defaultIsChecked={field.value && field.value.includes(props.value)}
           {...field}
           {...props}
         >
@@ -40,7 +41,7 @@ const InputCheckBox = ({
         ) : null}
       </FormControl>
     </LayoutFormControl>
-  );
-};
+  )
+}
 
 export default InputCheckBox
