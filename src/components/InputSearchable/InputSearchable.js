@@ -14,6 +14,7 @@ const InputSearchable = ({
     label,
     color = "brand.900",
     searchType = null,
+    formProps,
     ...props
   }) => {
   const [field, meta] = useField(props)
@@ -84,6 +85,10 @@ const InputSearchable = ({
                     }}
                     onClick={() => {
                       setValue(result.description || result.name)
+                      formProps.setValues({
+                        ...formProps.values,
+                        [props.name]: (result.description || result.name)
+                      })
                       setShowResults(false)
                     }}>
                     {result.description || result.name}
