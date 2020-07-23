@@ -816,6 +816,7 @@ const RegisterJourneyForm = (props) => {
                 label="Venue Name"
                 name="organiserVenueName"
                 type="organiserVenueName"
+                formProps={props}
                 placeholder="Venue Name"
                 searchType="venue"
               />

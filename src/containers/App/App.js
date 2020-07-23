@@ -16,6 +16,7 @@ import Profile from "./../../pages/Profile/Profile"
 import Login from "./../../pages/Login/Login"
 import Forgot from "./../../pages/Forgot/Forgot"
 import Reset from "./../../pages/Reset/Reset"
+import CreateEvent from "./../../pages/CreateEvent/CreateEvent"
 import "./base.min.css"
 
 
@@ -72,6 +73,9 @@ const App = ({ children }) => {
           </PrivateRoute>
           <PrivateRoute exact path="/profile">
             <Profile />
+          </PrivateRoute>
+          <PrivateRoute exact path="/create-event">
+            <CreateEvent />
           </PrivateRoute>
         </Switch>
       </Router>

@@ -37,7 +37,7 @@ const Header = (props) => {
   return (
     <Box bg="brand.900" className={styles.header}>
       <Link to="/">
-        <Image src="logo.svg" alt="The GLD" />
+        <Image src="/logo.svg" alt="The GLD" />
       </Link>
       <Menu>
         <MenuButton as={Button} variant="outline" variantColor="brand">
