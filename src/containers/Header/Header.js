@@ -35,7 +35,7 @@ const Header = (props) => {
   }, [toastMessage, toast])
 
   return (
-    <Box bg="brand.900" className={styles.header}>
+    <Box background={`linear-gradient(117.79deg, #52C3FF 27.59%, #008DD7 93.69%);`} className={styles.header}>
       <Link to="/">
         <Image src="/logo.svg" alt="The GLD" />
       </Link>
