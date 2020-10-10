@@ -1,5 +1,6 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import styles from "../../containers/Hero/Hero.module.css"
 import gtmHandler from "../../utils/gtmHandler"
 import Layout from "../../containers/Layout/Layout"
 import { SimpleGrid, Text, Box, Icon, Button, Image } from "@chakra-ui/core"
@@ -32,6 +33,35 @@ class Home extends React.Component {
     return (
       <Layout>
         <Box>
+          <Section horizontalPadding bg={`linear-gradient(117.79deg, #52C3FF 27.59%, #008DD7 93.69%);`}>
+            <div className={styles.hero}>
+              <Box className={styles.heroHomepageContent} display="flex" justifyContent="center" flexDirection="column">
+                <Text as="h1" fontSize="5xl" color="#ffffff">Welcome<br />to <span style={{ color: "#EC1D51" }}>the Gld.</span></Text>
+                <br />
+                <Text as="p" fontSize="lg" color="#ffffff">Gaming is a healthy, challenging and fun activity that plays an important role in our lives. But at some point gaming became too competitive and rarely compares to the memories to those endless summers of gaming with your mates.</Text>
+                <br />
+                <Button
+                  color="white"
+                  bg="#EC1D51"
+                  size="lg"
+                  width="fit-content"
+                  onClick={() => {
+                    gtmHandler({
+                      event: "register your venue",
+                      eventType: "button_click",
+                      category: {
+                        primaryCategory: "content interaction",
+                        subCategory: "homepage"
+                      }
+                    })
+                  }}><Link to="/register">Join the Gld. today</Link>
+                </Button>
+              </Box>
+              <Box className={styles.heroHomepageBg} display="flex" justifyContent="center" flexDirection="column">
+                <Image src="hero-homepage.png" alt="The GLD" display="inline-block" maxWidth="100%" />
+              </Box>
+            </div>
+          </Section>
           <Section horizontalPadding verticalPadding bg="#0A154A">
             <SimpleGrid minChildWidth="280px" spacing="40px">
               <Box display="flex" justifyContent="center" flexDirection="column">

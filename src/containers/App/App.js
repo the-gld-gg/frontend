@@ -74,7 +74,7 @@ const App = ({ children }) => {
           <PrivateRoute exact path="/profile">
             <Profile />
           </PrivateRoute>
-          <PrivateRoute exact path="/create-event">
+          <PrivateRoute exact path="/events/create">
             <CreateEvent />
           </PrivateRoute>
         </Switch>

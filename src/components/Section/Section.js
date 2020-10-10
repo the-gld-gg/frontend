@@ -15,7 +15,7 @@ const Section = ({
   description = ""
 }) => (
   <Box
-    bg={bg}
+    background={bg}
     textAlign={textAlign}
     className={classnames(styles.section, {
       [styles.horizontalPadding]: horizontalPadding,

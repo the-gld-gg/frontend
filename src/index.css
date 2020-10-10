@@ -14,7 +14,34 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
 }
 
+h1 span {
+  position: relative;
+}
+
+h1 span:after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 7px;
+  bottom: -7px;
+  left: 0;
+  background: #EE215B;
+  border-radius: 85% 50% 90% 0%;
+}
+
 button {
   height: auto !important;
   padding: 1rem;
+  border-radius: 32px !important;
+  position: relative;
+}
+
+button:after {
+  content: "";
+  position: absolute;
+  background: url("/button.png") no-repeat;
+  width: 33px;
+  height: 100%;
+  right: -33px;
+  top: -20px;
 }
