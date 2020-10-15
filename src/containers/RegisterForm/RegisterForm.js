@@ -25,7 +25,7 @@ const RegisterForm = (props) => {
 
   return (
     <>
-      <Text as="h3" fontSize="6xl" color="#4E4C5C">Join the Gld. today.</Text>
+      <Text as="h2" fontSize="5xl" color="#4E4C5C">Join <span style={{ color: "#EC1D51" }}>the Gld.</span> today</Text>
       <br />
       <Formik
         initialValues={{
