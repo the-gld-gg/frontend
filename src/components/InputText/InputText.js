@@ -16,6 +16,7 @@ const InputText = ({
   return (
     <LayoutFormControl>
       <FormControl>
+        <label for={props.name}>{label}</label>
         <InputGroup>
           {
             icon &&

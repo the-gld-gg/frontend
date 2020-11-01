@@ -1,11 +1,12 @@
 import React, { useState } from "react"
 import { Redirect } from "react-router"
-import { Formik, Form} from "formik"
+import { Formik, Form } from "formik"
 import * as Yup from "yup"
 import axios from "axios"
 import {
   Alert,
   AlertIcon,
+  Button,
   Text
 } from "@chakra-ui/core"
 import gtmHandler from "../../utils/gtmHandler"
@@ -86,7 +87,7 @@ const LoginForm = (props) => {
       >
         <Form>
           <InputText
-            label="Email"
+            label="Email address"
             name="email"
             type="email"
             placeholder="Email address"
@@ -97,7 +98,6 @@ const LoginForm = (props) => {
             type="password"
             placeholder="Password"
           />
-          <Link to="/forgot"><Text  color="brand.900">Forgot your password?</Text></Link>
           <br />
           <SubmitButton
             isLoading={loading}
@@ -122,7 +122,30 @@ const LoginForm = (props) => {
                 {item}
               </Alert>
             ))}
-          <Link to="/forgotpassword"><Text fontSize="xs" color="brand.800">Forgot your password?</Text></Link>
+          <Link to="/forgotpassword"><Text fontSize="s" fontWeight="bold" color="brand.800">Forgot your password?</Text></Link>
+          <br />
+          <br />
+          <br />
+          <Link to="/register"><Text  color="brand.900">Don't have an account yet?</Text></Link>
+          <br />
+          <Button
+            color="#EC1D51"
+            variantColor="#EC1D51"
+            bg="transparent"
+            width="100%"
+            size="lg"
+            variant="outline"
+            onClick={() => {
+              gtmHandler({
+                event: "register your venue",
+                eventType: "button_click",
+                category: {
+                  primaryCategory: "content interaction",
+                  subCategory: "homepage"
+                }
+              })
+            }}><Link to="/register">Join now</Link>
+          </Button>
         </Form>
       </Formik>
     </>

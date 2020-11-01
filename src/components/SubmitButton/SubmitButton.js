@@ -12,7 +12,7 @@ const SubmitButton = (props) => (
         isLoading={props.isSubmitting}
         type="submit"
         color="white"
-        bg="#0A154A"
+        bg="#EC1D51"
         size="lg"
         width="100%"
         fontSize="3xl"

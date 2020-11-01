@@ -48,6 +48,13 @@ button:after {
   top: -20px;
 }
 
+label {
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 24px;
+  display: block;
+}
+
 .text-65 {
   width: 65%
 }

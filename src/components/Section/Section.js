@@ -6,6 +6,7 @@ import styles from "./Section.module.css"
 const Section = ({
   children,
   bg = "white",
+  backgroundSize ="100%",
   textAlign = "center",
   horizontalPadding = false,
   verticalPadding = false,
@@ -16,6 +17,7 @@ const Section = ({
 }) => (
   <Box
     background={bg}
+    backgroundSize={backgroundSize}
     textAlign={textAlign}
     className={classnames(styles.section, {
       [styles.horizontalPadding]: horizontalPadding,
