@@ -11,8 +11,10 @@ const SubmitButton = (props) => (
       <Button
         isLoading={props.isSubmitting}
         type="submit"
-        color="white"
-        bg="#EC1D51"
+        color={props.color || "white"}
+        bg={props.bg || "#EC1D51"}
+        variant={props.variant}
+        variantColor={props.variantColor}
         size="lg"
         width="100%"
         fontSize="3xl"

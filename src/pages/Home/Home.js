@@ -236,7 +236,7 @@ class Home extends React.Component {
               </Box>
             </SimpleGrid>
           </Section> */}
-          <Section horizontalPadding verticalPadding bg="#DEE4EE">
+          <Section bg="#DEE4EE" fullWidth>
             <RegisterForm gtm={{ subCategory: "homepage" }} />
           </Section>
         </Box>

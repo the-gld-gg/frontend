@@ -4,11 +4,12 @@ import Header from "../Header/Header"
 
 const LayoutAuth = ({
   children,
+  headerBg
 }) => {
   return (
   <div className={styles.layout}>
     <div className={styles.components}>
-      <Header />
+      <Header headerBg={headerBg} />
       {children}
     </div>
   </div>
