@@ -13,7 +13,6 @@ import {
 import gtmHandler from "../../utils/gtmHandler"
 import InputText from "./../../components/InputText/InputText"
 import SubmitButton from "./../../components/SubmitButton/SubmitButton"
-import { Link } from "react-router-dom"
 import Section from "../../components/Section/Section"
 
 const RegisterForm = (props) => {
@@ -28,7 +27,7 @@ const RegisterForm = (props) => {
 
   return (
     <>
-      <Section verticalPadding horizontalPadding bg="#DEE4EE url(/hero-dots.png) no-repeat top right" backgroundSize="15%" textAlign="left">
+      <Section verticalPadding horizontalPadding bg="#DEE4EE url(/hero-dots.png) no-repeat top right" backgroundSize="10%" textAlign="left" fullWidth>
         <Text as="h1" fontSize="5xl" color="#4E4C5C">Join <span style={{ color: "#EC1D51" }}>the Gld.</span> today</Text>
       </Section>
       <Section fullWidth verticalPadding>
