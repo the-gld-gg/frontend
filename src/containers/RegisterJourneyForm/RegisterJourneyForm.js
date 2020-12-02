@@ -4,13 +4,17 @@ import { Formik, Form} from "formik"
 import axios from "axios"
 import {
   Text,
-  Button
+  Button,
+  Box,
+  Image
 } from "@chakra-ui/core"
 import gtmHandler from "../../utils/gtmHandler"
 import InputText from "./../../components/InputText/InputText"
 import InputSearchable from "../../components/InputSearchable/InputSearchable"
 import InputCheckBox from "./../../components/InputCheckBox/InputCheckBox"
+import InputRadio from "./../../components/InputRadio/InputRadio"
 import SubmitButton from "./../../components/SubmitButton/SubmitButton"
+import Section from "./../../components/Section/Section"
 import { Link } from "react-router-dom"
 
 const RegisterJourneyForm = (props) => {
@@ -19,8 +23,8 @@ const RegisterJourneyForm = (props) => {
   const [games, setGames] = useState([])
   const [genres, setGenres] = useState([])
   const [platforms, setPlatforms] = useState([])
-  const [step, setStep] = useState("aboutYou")
-  const [userType, setUserType] = useState("gamer")
+  const [step, setStep] = useState("games")
+  const [userType, setUserType] = useState("venue")
   const [userProfile, setUserProfile] = useState([])
 
   useEffect(() => {
@@ -51,8 +55,10 @@ const RegisterJourneyForm = (props) => {
   }
 
   const buttonProps = {
-    color: "white",
-    bg: "#0A154A",
+    color: "#EC1D51",
+    bg: "transparent",
+    variant: "outline",
+    variantColor: "#EC1D51",
     size: "lg",
     width: "100%",
     fontSize: "3xl",
@@ -77,6 +83,7 @@ const RegisterJourneyForm = (props) => {
           twitch_id: userProfile.profile && userProfile.profile.twitch_id ? userProfile.profile.twitch_id : "",
           vname: userProfile.venues && userProfile.venues[0] && userProfile.venues[0].name ? userProfile.venues[0].name : "",
           vaddress: userProfile.venues && userProfile.venues[0] && userProfile.venues[0].address ? userProfile.venues[0].address : "",
+          userType: userProfile.userType ? userProfile.userType : userType,
           cpu: "",
           ram: "",
           graphic: "",
@@ -309,597 +316,646 @@ const RegisterJourneyForm = (props) => {
       >{
         props =>
         <Form>
-          <div style={{ width: "375px", maxWidth: "100%", margin: "0 auto" }}>
-            <div
-              style={{
-                display: step === "aboutYou" ? "block" : "none", // A little bit about yourself
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                First, a bit about yourself
-              </Text>
-              <br />
-              <Button {...buttonProps} onClick={() => setStep("platforms")}>
-                Next
-              </Button>
-              <br />
-              <br />
-              <Button {...buttonProps} onClick={() => setStep("gamerThanks")}>
-                Add later
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "platforms" ? "block" : "none", // Preferred platforms
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Preferred platforms
-              </Text>
-              <br />
-              <div>
-                {
-                  platforms &&
-                  platforms.length > 0 &&
-                  platforms.map(platform => {
-                    return (
-                      <InputCheckBox
-                        key={platform.id}
-                        name="platforms"
-                        value={platform.id}
-                      >
-                        {platform.name}
-                      </InputCheckBox>
-                    )
-                  })
-                }
-              </div>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("genres")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "genres" ? "block" : "none", // Favourite genres
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Favourite genres
-              </Text>
-              <br />
-              <div>
-                {
-                  genres &&
-                  genres.length > 0 &&
-                  genres.map(genre => {
-                    return (
-                      <InputCheckBox
-                        key={genre.id}
-                        name="genres"
-                        value={genre.id}
-                      >
-                        {genre.name}
-                      </InputCheckBox>
-                    )
-                  })
-                }
-              </div>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("games")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "games" ? "block" : "none", // Favourite games
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Favourite games
-              </Text>
-              <br />
-              <div>
-                {
-                  games &&
-                  games.length > 0 &&
-                  games.map(game => {
-                    return (
-                      <InputCheckBox
-                        key={game.id}
-                        name="games"
-                        value={game.id}
-                      >
-                        {game.name}
-                      </InputCheckBox>
-                    )
-                  })
-                }
-              </div>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("gamerTags")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "gamerTags" ? "block" : "none", // Gamer tags
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Add your gamer tags for more visibility
-              </Text>
-              <br />
-              <InputText
-                label="PlayStation Network"
-                name="psn"
-                type="psn"
-                icon="playstation"
-                placeholder="PlayStation Network"
-              />
-              <InputText
-                label="XBox Live"
-                name="xbox_id"
-                type="xbox_id"
-                icon="xbox"
-                placeholder="XBox Live"
-              />
-              <InputText
-                label="Steam ID"
-                name="steam_id"
-                type="steam_id"
-                icon="steam"
-                placeholder="Steam ID"
-              />
-              <Button {...buttonProps} onClick={() => setStep("userType")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "userType" ? "block" : "none", // What are you here to do ??
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                I am here to
-              </Text>
-              <br />
-              <Button {...buttonProps} onClick={() => {
-                setUserType("venue")
-                setStep("venueInfo")
-              }}>
-                Register my venue
-              </Button>
-              <br />
-              <br />
-              <Button {...buttonProps} onClick={() => {
-                setUserType("organiser")
-                setStep("organiserInfo")
-              }}>
-                Organise tournaments
-              </Button>
-              <br />
-              <br />
-              <Button {...buttonProps} onClick={() => {
-                setUserType("gamer")
-                setStep("gamerType")
-              }}>
-                Play in tournaments
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "venueInfo" ? "block" : "none", // Venue info
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Venue Info
-              </Text>
-              <br />
-              <InputText
-                label="Venue Name"
-                name="vname"
-                type="vname"
-                placeholder="Venue Name"
-              />
-              <InputSearchable
-                label="Venue Address"
-                name="vaddress"
-                type="vaddress"
-                formProps={props}
-                placeholder="Venue Address"
-              />
-              <Button {...buttonProps} onClick={() => setStep("venuePlatforms")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "venuePlatforms" ? "block" : "none", // Venue platforms
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Available platforms
-              </Text>
-              <br />
-              <div>
-                {
-                  platforms &&
-                  platforms.length > 0 &&
-                  platforms.map(platform => {
-                    return (
-                      <InputCheckBox
-                        key={platform.id}
-                        name="venuePlatforms"
-                        value={platform.id}
-                      >
-                        {platform.name}
-                      </InputCheckBox>
-                    )
-                  })
-                }
-              </div>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("venueGames")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "venueGames" ? "block" : "none", // Venue games
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Games available to play
-              </Text>
-              <br />
-              <div>
-                {
-                  props.values.venuePlatforms &&
-                  props.values.venuePlatforms.length > 0 &&
-                  props.values.venuePlatforms.map(venuePlatform => {
-                    return (
-                      <div key={venuePlatform}>
-                        <Text as="h6" fontSize="xl" color="brand.900" textAlign="left">
-                          {platforms.find(item => item.id === venuePlatform).name}
-                        </Text>
-                        <div>
-                          {
-                            games &&
-                            games.length > 0 &&
-                            games.map(game => {
-                              if (game.platforms.findIndex(item => item.id === venuePlatform) === -1) return null
-                              return (
-                                <InputCheckBox
-                                  key={game.id}
-                                  name="venueGames"
-                                  value={game.id}
-                                >
-                                  {game.name}
-                                </InputCheckBox>
-                              )
-                            })
-                          }
-                        </div>
-                      </div>
-                    )
-                  })
-                }
-              </div>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("venueGamingFacilities")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "venueGamingFacilities" ? "block" : "none", // Gaming facilities
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Gaming facilities
-              </Text>
-              <br />
-              <div>
-                <InputCheckBox name="venueGamingFacilities" value="lan">LAN</InputCheckBox>
-                <InputCheckBox name="venueGamingFacilities" value="gaming_booth">Private Gaming Booths</InputCheckBox>
-                <InputCheckBox name="venueGamingFacilities" value="booth">Private booth</InputCheckBox>
-                <InputCheckBox name="venueGamingFacilities" value="tv_screens">TV screens / streams</InputCheckBox>
-                <InputCheckBox name="venueGamingFacilities" value="arena">Arena</InputCheckBox>
-              </div>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("venueFacilities")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "venueFacilities" ? "block" : "none", // Venue facilities
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Venue facilities
-              </Text>
-              <br />
-              <div>
-                <InputCheckBox name="venueFacilities" value="soft_drinks">Soft drinks</InputCheckBox>
-                <InputCheckBox name="venueFacilities" value="alchohol">Alcoholic drinks</InputCheckBox>
-                <InputCheckBox name="venueFacilities" value="food">Food</InputCheckBox>
-              </div>
-              <br /> <br />
-              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep("venueThanks")}>
-                Next
-              </SubmitButton>
-            </div>
-            <div
-              style={{
-                display: step === "venueThanks" ? "block" : "none", // Venue thanks
-              }}
-            >
-              <Text as="h3" fontSize="xl" color="white">
-                Thank you!
-              </Text>
-              <br />
-              <Text as="h4" fontSize="3xl" color="white">
-                Welcome to The GLD
-              </Text>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                View venue on the map
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Link Facebook
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Link Twitch
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Link Twitter
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Manage venue profile
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setResult({ redirect: "/" })}>
-                Home
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "gamerType" ? "block" : "none", // Gamer looking for
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                I am looking to
-              </Text>
-              <br />
-              <div>
-                <InputCheckBox name="gamerType" value="social">Play socially</InputCheckBox>
-                <InputCheckBox name="gamerType" value="competitive">Play competitively</InputCheckBox>
-                <InputCheckBox name="gamerType" value="other">Other</InputCheckBox>
-              </div>
-              <br /> <br />
-              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep("gamerThanks")}>
-                Next
-              </SubmitButton>
-            </div>
-            <div
-              style={{
-                display: step === "gamerThanks" ? "block" : "none", // Gamer thanks
-              }}
-            >
-              <Text as="h3" fontSize="xl" color="white">
-                Thank you!
-              </Text>
-              <br />
-              <Text as="h4" fontSize="3xl" color="white">
-                Welcome to The GLD
-              </Text>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Invite friends
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Update profile
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Find tournaments
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setResult({ redirect: "/" })}>
-                Home
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "organiserInfo" ? "block" : "none", // Organiser info
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Organiser Info
-              </Text>
-              <br />
-              <Text as="p" fontSize="xl" color="white">
-                Now, some information on how you will manage tournamrnts.
-              </Text>
-              <br />
-              <InputText
-                label="Organiser Alias"
-                name="oalias"
-                type="oalias"
-                formProps={props}
-                defaultValue={userProfile && userProfile.organiser && userProfile.organiser.name}
-                placeholder="Organiser Alias"
-              />
-              <Button {...buttonProps} onClick={() => setStep("organiserPlatforms")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "organiserPlatforms" ? "block" : "none", // Organiser platforms
-              }}
-            >
-              <Text as="h4" fontSize="xl" color="white">
-                Which platforms will you be mostly creating tournaments for?
-              </Text>
-              <br />
-              <div>
-                {
-                  platforms &&
-                  platforms.length > 0 &&
-                  platforms.map(platform => {
-                    return (
-                      <InputCheckBox
-                        key={platform.id}
-                        name="organiserPlatforms"
-                        value={platform.id}
-                      >
-                        {platform.name}
-                      </InputCheckBox>
-                    )
-                  })
-                }
-              </div>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("organiserGames")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "organiserGames" ? "block" : "none", // Organiser games
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Games you would like to organise tournaments for?
-              </Text>
-              <br />
-              <div>
-                {
-                  games &&
-                  games.length > 0 &&
-                  games.map(game => {
-                    return (
-                      <InputCheckBox
-                        key={game.id}
-                        name="organiserGames"
-                        value={game.id}
-                      >
-                        {game.name}
-                      </InputCheckBox>
-                    )
-                  })
-                }
-              </div>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("organiserVenue")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "organiserVenue" ? "block" : "none", // Organiser Venue
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Venue Info
-              </Text>
-              <br />
-              <InputSearchable
-                label="Venue Name"
-                name="organiserVenueName"
-                type="organiserVenueName"
-                formProps={props}
-                placeholder="Venue Name"
-                searchType="venue"
-              />
-              <InputText
-                label="Office Location"
-                name="organiserOffice"
-                type="organiserOffice"
-                formProps={props}
-                defaultValue={userProfile && userProfile.organiser && userProfile.organiser.office}
-                placeholder="Office Location"
-              />
-              <InputText
-                label="Other"
-                name="organiserOther"
-                type="organiserOther"
-                placeholder="Other"
-              />
-              <Button {...buttonProps} onClick={() => setStep("organiserEquipment")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "organiserEquipment" ? "block" : "none", // Organiser equipment
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                What equipments will you need for your tournaments?
-              </Text>
-              <br />
-              <div>
-                <InputCheckBox name="organiserEquipment" value="venue_equipment">Venue equipment</InputCheckBox>
-                <InputCheckBox name="organiserEquipment" value="byo_equip">BYO equipment</InputCheckBox>
-                <InputCheckBox name="organiserEquipment" value="source_equip">I would like to source the equipment when I need it</InputCheckBox>
-              </div>
-              <br /> <br />
-              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep("organiserThanks")}>
-                Next
-              </SubmitButton>
-            </div>
-            <div
-              style={{
-                display: step === "organiserThanks" ? "block" : "none", // Organiser thanks
-              }}
-            >
-              <Text as="h3" fontSize="xl" color="white">
-                Thank you!
-              </Text>
-              <br />
-              <Text as="h4" fontSize="3xl" color="white">
-                Welcome to The GLD
-              </Text>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Invite friends
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Update personal profile
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Update organiser profile
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Share on social media
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setResult({ redirect: "/" })}>
-                Home
-              </Button>
-            </div>
-            <br />
-            {
-              step !== "aboutYou" &&
-              step !== "userType" &&
-              step !== "gamerThanks" &&
-              step !== "venueThanks" &&
-              step !== "organiserThanks" &&
-              <Link to="/profile">Skip for now</Link>
-            }
-          </div>
+          <Section verticalPadding horizontalPadding bg="#DEE4EE url(/hero-dots.png) no-repeat top right" backgroundSize="10%" textAlign="left" fullWidth>
+            <Text as="h1" fontSize="5xl" color="#4E4C5C">Join <span style={{ color: "#EC1D51" }}>the Gld.</span> today</Text>
+          </Section>
+          <Section fullWidth verticalPadding>
+            <Box display="flex">
+              <Box flexShrink={0} className="hide-mobile">
+                <Section horizontalPadding textAlign="left">
+                  {
+                    step === "games" &&
+                    <Text as="h1" fontSize="5xl" color="#4E4C5C"><span style={{ color: "#EC1D51" }}>02.</span></Text>
+                  }
+                  {
+                    step === "profile" &&
+                    <Text as="h1" fontSize="5xl" color="#4E4C5C"><span style={{ color: "#EC1D51" }}>03.</span></Text>
+                  }
+                  {
+                    step === "play" &&
+                    <Text as="h1" fontSize="5xl" color="#4E4C5C"><span style={{ color: "#EC1D51" }}>04.</span></Text>
+                  }
+                  <br />
+                  {
+                    step === "games" &&
+                    <Text as="h2" fontSize="4xl" color="#4E4C5C">So what gaming are you into?</Text>
+                  }
+                  {
+                    step === "profile" &&
+                    <Text as="h2" fontSize="4xl" color="#4E4C5C">Now tell us about you.</Text>
+                  }
+                  {
+                    step === "play" &&
+                    <Text as="h2" fontSize="4xl" color="#4E4C5C">All set up!<br />Now let's begin.</Text>
+                  }
+                  <br />
+                  <br />
+                </Section>
+                <Image src="/xboxController.png" alt="Login" margin="0 auto" display="block" />
+              </Box>
+              <Section horizontalPadding textAlign="left">
+                <div style={{ width: "100%", maxWidth: "768px", margin: "0 auto" }}>
+                  <div
+                    style={{
+                      display: step === "games" ? "block" : "none", // Preferred platforms
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Preferred platforms
+                    </Text>
+                    <br />
+                    <div>
+                      {
+                        platforms &&
+                        platforms.length > 0 &&
+                        platforms.map(platform => {
+                          return (
+                            <InputCheckBox
+                              key={platform.id}
+                              name="platforms"
+                              value={platform.id}
+                            >
+                              {platform.name}
+                            </InputCheckBox>
+                          )
+                        })
+                      }
+                    </div>
+                    <br /> <br />
+                    {/* <Button {...buttonProps} onClick={() => setStep("genres")}>
+                      Next
+                    </Button> */}
+                  </div>
+                  <div
+                    style={{
+                      display: step === "games" ? "block" : "none", // Gamer tags
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Add your gamer tags for more visibility
+                    </Text>
+                    <br />
+                    <InputText
+                      label="PlayStation Network"
+                      name="psn"
+                      type="psn"
+                      icon="playstation"
+                      placeholder="PlayStation Network"
+                    />
+                    <InputText
+                      label="XBox Live"
+                      name="xbox_id"
+                      type="xbox_id"
+                      icon="xbox"
+                      placeholder="XBox Live"
+                    />
+                    <InputText
+                      label="Steam ID"
+                      name="steam_id"
+                      type="steam_id"
+                      icon="steam"
+                      placeholder="Steam ID"
+                    />
+                    <br /> <br />
+                    {/* <Button {...buttonProps} onClick={() => setStep("userType")}>
+                      Next
+                    </Button> */}
+                  </div>
+                  <div
+                    style={{
+                      display: step === "games" ? "block" : "none", // Favourite genres
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Favourite genres
+                    </Text>
+                    <br />
+                    <div>
+                      {
+                        genres &&
+                        genres.length > 0 &&
+                        genres.map(genre => {
+                          return (
+                            <InputCheckBox
+                              key={genre.id}
+                              name="genres"
+                              value={genre.id}
+                            >
+                              {genre.name}
+                            </InputCheckBox>
+                          )
+                        })
+                      }
+                    </div>
+                    <br /> <br />
+                    {/* <Button {...buttonProps} onClick={() => setStep("games")}>
+                      Next
+                    </Button> */}
+                  </div>
+                  <div
+                    style={{
+                      display: step === "games" ? "block" : "none", // Favourite games
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Favourite games
+                    </Text>
+                    <br />
+                    <div>
+                      {
+                        games &&
+                        games.length > 0 &&
+                        games.map(game => {
+                          return (
+                            <InputCheckBox
+                              key={game.id}
+                              name="games"
+                              value={game.id}
+                            >
+                              {game.name}
+                            </InputCheckBox>
+                          )
+                        })
+                      }
+                    </div>
+                    <br /> <br />
+                    <Button
+                      {...buttonProps}
+                      onClick={() => {
+                        setStep("profile")
+                        window.scrollTo({
+                          top: 0,
+                          behavior: 'smooth'
+                        })
+                      }
+                    }>
+                      Continue
+                    </Button>
+                  </div>
+                  <div
+                    style={{
+                      display: step === "profile" ? "block" : "none", // What are you here to do ??
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      I am here to
+                    </Text>
+                    <br />
+                    <InputRadio
+                      name="userType"
+                      value="venue"
+                    >
+                      Register my venue
+                    </InputRadio>
+                    <InputRadio
+                      name="userType"
+                      value="organiser"
+                    >
+                      Organise tournaments
+                    </InputRadio>
+                    <InputRadio
+                      name="userType"
+                      value="gamer"
+                    >
+                      Play in tournaments
+                    </InputRadio>
+                    <br />
+                    <br />
+                  </div>
+                  <div
+                    style={{
+                      display: step === "profile" && props.values.userType === "venue" ? "block" : "none", // Venue info
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Venue Info
+                    </Text>
+                    <br />
+                    <InputText
+                      label="Venue Name"
+                      name="vname"
+                      type="vname"
+                      placeholder="Venue Name"
+                    />
+                    <InputSearchable
+                      label="Venue Address"
+                      name="vaddress"
+                      type="vaddress"
+                      formProps={props}
+                      placeholder="Venue Address"
+                    />
+                    <br /><br />
+                    {/* <Button {...buttonProps} onClick={() => setStep("venuePlatforms")}>
+                      Next
+                    </Button> */}
+                  </div>
+                  <div
+                    style={{
+                      display: step === "profile" && props.values.userType === "venue" ? "block" : "none", // Venue platforms
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Available platforms
+                    </Text>
+                    <br />
+                    <div>
+                      {
+                        platforms &&
+                        platforms.length > 0 &&
+                        platforms.map(platform => {
+                          return (
+                            <InputCheckBox
+                              key={platform.id}
+                              name="venuePlatforms"
+                              value={platform.id}
+                            >
+                              {platform.name}
+                            </InputCheckBox>
+                          )
+                        })
+                      }
+                    </div>
+                    <br /> <br />
+                    {/* <Button {...buttonProps} onClick={() => setStep("venueGames")}>
+                      Next
+                    </Button> */}
+                  </div>
+                  <div
+                    style={{
+                      display: step === "profile" && props.values.userType === "venue" ? "block" : "none", // Venue games
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Games available to play
+                    </Text>
+                    <br />
+                    <div>
+                      {
+                        props.values.venuePlatforms &&
+                        props.values.venuePlatforms.length > 0 &&
+                        props.values.venuePlatforms.map(venuePlatform => {
+                          return (
+                            <div key={venuePlatform}>
+                              <Text as="h6" fontSize="xl" color="brand.900" textAlign="left">
+                                {platforms.find(item => item.id === venuePlatform).name}
+                              </Text>
+                              <div>
+                                {
+                                  games &&
+                                  games.length > 0 &&
+                                  games.map(game => {
+                                    if (game.platforms.findIndex(item => item.id === venuePlatform) === -1) return null
+                                    return (
+                                      <InputCheckBox
+                                        key={game.id}
+                                        name="venueGames"
+                                        value={game.id}
+                                      >
+                                        {game.name}
+                                      </InputCheckBox>
+                                    )
+                                  })
+                                }
+                              </div>
+                            </div>
+                          )
+                        })
+                      }
+                    </div>
+                    <br /> <br />
+                    {/* <Button {...buttonProps} onClick={() => setStep("venueGamingFacilities")}>
+                      Next
+                    </Button> */}
+                  </div>
+                  <div
+                    style={{
+                      display: step === "profile" && props.values.userType === "venue" ? "block" : "none", // Gaming facilities
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Gaming facilities
+                    </Text>
+                    <br />
+                    <div>
+                      <InputCheckBox name="venueGamingFacilities" value="lan">LAN</InputCheckBox>
+                      <InputCheckBox name="venueGamingFacilities" value="gaming_booth">Private Gaming Booths</InputCheckBox>
+                      <InputCheckBox name="venueGamingFacilities" value="booth">Private booth</InputCheckBox>
+                      <InputCheckBox name="venueGamingFacilities" value="tv_screens">TV screens / streams</InputCheckBox>
+                      <InputCheckBox name="venueGamingFacilities" value="arena">Arena</InputCheckBox>
+                    </div>
+                    <br /> <br />
+                    {/* <Button {...buttonProps} onClick={() => setStep("venueFacilities")}>
+                      Next
+                    </Button> */}
+                  </div>
+                  <div
+                    style={{
+                      display: step === "profile" && props.values.userType === "venue" ? "block" : "none", // Venue facilities
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Venue facilities
+                    </Text>
+                    <br />
+                    <div>
+                      <InputCheckBox name="venueFacilities" value="soft_drinks">Soft drinks</InputCheckBox>
+                      <InputCheckBox name="venueFacilities" value="alchohol">Alcoholic drinks</InputCheckBox>
+                      <InputCheckBox name="venueFacilities" value="food">Food</InputCheckBox>
+                    </div>
+                    <br /> <br />
+                    <SubmitButton
+                      isLoading={loading}
+                      {...buttonProps}
+                      onClick={() => {
+                        setStep("play")
+                        window.scrollTo({
+                          top: 0,
+                          behavior: 'smooth'
+                        })
+                      }}>
+                      Continue
+                    </SubmitButton>
+                  </div>
+                  <div
+                    style={{
+                      display: step === "play" && props.values.userType === "venue" ? "block" : "none", // Venue thanks
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Welcome to The GLD
+                    </Text>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      View venue on the map
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Link Facebook
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Link Twitch
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Link Twitter
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Manage venue profile
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setResult({ redirect: "/" })}>
+                      Home
+                    </Button>
+                  </div>
+                  <div
+                    style={{
+                      display: step === "profile" && props.values.userType === "gamer" ? "block" : "none", // Gamer looking for
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      I am looking to
+                    </Text>
+                    <br />
+                    <div>
+                      <InputCheckBox name="gamerType" value="social">Play socially</InputCheckBox>
+                      <InputCheckBox name="gamerType" value="competitive">Play competitively</InputCheckBox>
+                      <InputCheckBox name="gamerType" value="other">Other</InputCheckBox>
+                    </div>
+                    <br /> <br />
+                    <SubmitButton
+                      isLoading={loading}
+                      {...buttonProps}
+                      onClick={() => {
+                        setStep("play")
+                        window.scrollTo({
+                          top: 0,
+                          behavior: 'smooth'
+                        })
+                      }}>
+                      Continue
+                    </SubmitButton>
+                  </div>
+                  <div
+                    style={{
+                      display: step === "play" && props.values.userType === "gamer" ? "block" : "none", // Gamer thanks
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Welcome to The GLD
+                    </Text>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Invite friends
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Update profile
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Find tournaments
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setResult({ redirect: "/" })}>
+                      Home
+                    </Button>
+                  </div>
+                  <div
+                    style={{
+                      display: step === "profile" && props.values.userType === "organiser" ? "block" : "none", // Organiser info
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Organiser Info
+                    </Text>
+                    <br />
+                    <Text as="p" fontSize="xl">
+                      Now, some information on how you will manage tournamrnts.
+                    </Text>
+                    <br />
+                    <InputText
+                      label="Organiser Alias"
+                      name="oalias"
+                      type="oalias"
+                      formProps={props}
+                      defaultValue={userProfile && userProfile.organiser && userProfile.organiser.name}
+                      placeholder="Organiser Alias"
+                    />
+                    <br /> <br />
+                    {/* <Button {...buttonProps} onClick={() => setStep("organiserPlatforms")}>
+                      Next
+                    </Button> */}
+                  </div>
+                  <div
+                    style={{
+                      display: step === "profile" && props.values.userType === "organiser" ? "block" : "none", // Organiser platforms
+                    }}
+                  >
+                    <Text as="h4" fontSize="xl">
+                      Which platforms will you be mostly creating tournaments for?
+                    </Text>
+                    <br />
+                    <div>
+                      {
+                        platforms &&
+                        platforms.length > 0 &&
+                        platforms.map(platform => {
+                          return (
+                            <InputCheckBox
+                              key={platform.id}
+                              name="organiserPlatforms"
+                              value={platform.id}
+                            >
+                              {platform.name}
+                            </InputCheckBox>
+                          )
+                        })
+                      }
+                    </div>
+                    <br /> <br />
+                    {/* <Button {...buttonProps} onClick={() => setStep("organiserGames")}>
+                      Next
+                    </Button> */}
+                  </div>
+                  <div
+                    style={{
+                      display: step === "profile" && props.values.userType === "organiser" ? "block" : "none", // Organiser games
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Games you would like to organise tournaments for?
+                    </Text>
+                    <br />
+                    <div>
+                      {
+                        games &&
+                        games.length > 0 &&
+                        games.map(game => {
+                          return (
+                            <InputCheckBox
+                              key={game.id}
+                              name="organiserGames"
+                              value={game.id}
+                            >
+                              {game.name}
+                            </InputCheckBox>
+                          )
+                        })
+                      }
+                    </div>
+                    <br /> <br />
+                    {/* <Button {...buttonProps} onClick={() => setStep("organiserVenue")}>
+                      Next
+                    </Button> */}
+                  </div>
+                  <div
+                    style={{
+                      display: step === "profile" && props.values.userType === "organiser" ? "block" : "none", // Organiser Venue
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Venue Info
+                    </Text>
+                    <br />
+                    <InputSearchable
+                      label="Venue Name"
+                      name="organiserVenueName"
+                      type="organiserVenueName"
+                      formProps={props}
+                      placeholder="Venue Name"
+                      searchType="venue"
+                    />
+                    <InputText
+                      label="Office Location"
+                      name="organiserOffice"
+                      type="organiserOffice"
+                      formProps={props}
+                      defaultValue={userProfile && userProfile.organiser && userProfile.organiser.office}
+                      placeholder="Office Location"
+                    />
+                    <InputText
+                      label="Other"
+                      name="organiserOther"
+                      type="organiserOther"
+                      placeholder="Other"
+                    />
+                    <br /><br />
+                    {/* <Button {...buttonProps} onClick={() => setStep("organiserEquipment")}>
+                      Next
+                    </Button> */}
+                  </div>
+                  <div
+                    style={{
+                      display: step === "profile" && props.values.userType === "organiser" ? "block" : "none", // Organiser equipment
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      What equipments will you need for your tournaments?
+                    </Text>
+                    <br />
+                    <div>
+                      <InputCheckBox name="organiserEquipment" value="venue_equipment">Venue equipment</InputCheckBox>
+                      <InputCheckBox name="organiserEquipment" value="byo_equip">BYO equipment</InputCheckBox>
+                      <InputCheckBox name="organiserEquipment" value="source_equip">I would like to source the equipment when I need it</InputCheckBox>
+                    </div>
+                    <br /> <br />
+                    <SubmitButton
+                      isLoading={loading}
+                      {...buttonProps}
+                      onClick={() => {
+                        setStep("play")
+                        window.scrollTo({
+                          top: 0,
+                          behavior: 'smooth'
+                        })
+                      }}>
+                      Continue
+                    </SubmitButton>
+                  </div>
+                  <div
+                    style={{
+                      display: step === "play" && props.values.userType === "organiser" ? "block" : "none", // Organiser thanks
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Welcome to The GLD
+                    </Text>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Invite friends
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Update personal profile
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Update organiser profile
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Share on social media
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setResult({ redirect: "/" })}>
+                      Home
+                    </Button>
+                  </div>
+                  <br />
+                  {/* {
+                    step !== "aboutYou" &&
+                    step !== "userType" &&
+                    step !== "gamerThanks" &&
+                    step !== "venueThanks" &&
+                    step !== "organiserThanks" &&
+                    <Link to="/profile">Skip for now</Link>
+                  } */}
+                </div>
+              </Section>
+            </Box>
+          </Section>
         </Form>
         }
       </Formik>

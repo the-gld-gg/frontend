@@ -28,8 +28,8 @@ class Register extends React.Component {
 
   render() {
     return (
-      <LayoutAuth>
-        <Section horizontalPadding verticalPadding bg="#EE215B">
+      <LayoutAuth headerBg="#DEE4EE">
+        <Section bg="#DEE4EE" fullWidth>
           <RegisterJourneyForm gtm={{ subCategory: "registration journey page" }} {...this.props} />
         </Section>
       </LayoutAuth>

@@ -23,7 +23,7 @@ const InputText = ({
             <InputLeftElement
               width="62px"
               height="62px"
-              children={<Icon width="20px" height="20px" name={icon} />}
+              children={<Icon width="20px" height="20px" name={icon} color="#EC1D51" />}
             />
           }
           <Input className={styles.input} {...field} {...props} />

@@ -11,7 +11,7 @@ const InputCheckBox = ({
   variantColor = "blue",
   size = "lg",
   spacing = 6,
-  color = "white",
+  color = "#101010",
   fontWeight = "bold",
   textAlign = "left",
   ...props

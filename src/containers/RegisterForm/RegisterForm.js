@@ -43,7 +43,7 @@ const RegisterForm = (props) => {
             <Image src="/xboxController.png" alt="Login" margin="0 auto" display="block" />
           </Box>
           <Section horizontalPadding>
-            <Text as="h3" fontSize="3xl" color="#EC1D51" textAlign="left">Account info</Text>
+            <Text as="h3" fontSize="3xl" color="#EC1D51">Account info</Text>
             <br />
             <Formik
               initialValues={{
