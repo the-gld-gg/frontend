@@ -28,8 +28,8 @@ class CreateEvent extends React.Component {
 
   render() {
     return (
-      <LayoutAuth>
-        <Section horizontalPadding verticalPadding bg="#EE215B">
+      <LayoutAuth headerBg="#DEE4EE">
+        <Section bg="#DEE4EE" fullWidth>
           <CreateEventForm gtm={{ subCategory: "create event page" }} {...this.props} />
         </Section>
       </LayoutAuth>

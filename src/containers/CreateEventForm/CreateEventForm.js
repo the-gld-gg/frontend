@@ -4,6 +4,8 @@ import { Formik, Form} from "formik"
 import axios from "axios"
 import {
   Text,
+  Box,
+  Image,
   Button
 } from "@chakra-ui/core"
 import gtmHandler from "../../utils/gtmHandler"
@@ -12,9 +14,10 @@ import InputRadio from "./../../components/InputRadio/InputRadio"
 import InputSelect from "./../../components/InputSelect/InputSelect"
 import InputSearchable from "../../components/InputSearchable/InputSearchable"
 import SubmitButton from "./../../components/SubmitButton/SubmitButton"
+import Section from "./../../components/Section/Section"
 
 const CreateEventForm = (props) => {
-  const [step, setStep] = useState("eventType")
+  const [step, setStep] = useState("details")
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState(null)
   const [games, setGames] = useState([])
@@ -65,9 +68,12 @@ const CreateEventForm = (props) => {
         initialValues={{
           location: "online",
           event_place: "online",
+          eventType: "tournament",
           venueId: "",
           days: "0",
-          weeks: "0"
+          weeks: "0",
+          format: "pool-system",
+          fee_type: "entry-fee"
         }}
         onSubmit={(values, actions) => {
           setLoading(true)
@@ -139,373 +145,427 @@ const CreateEventForm = (props) => {
       >{
         props =>
         <Form>
-          <div style={{ width: "375px", maxWidth: "100%", margin: "0 auto" }}>
-            <div
-              style={{
-                display: step === "eventType" ? "block" : "none", // Event Type
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                What kind of event would you like to organise?
-              </Text>
-              <br />
-              <Button {...buttonProps} onClick={() => {
-                setEventType("social")
-                setStep("date")
-              }}>
-                Social event
-              </Button>
-              <br /><br />
-              <Button {...buttonProps} onClick={() => {
-                setEventType("tournament")
-                setStep("date")
-              }}>
-                Tournament
-              </Button>
-              <br /><br />
-              <Button {...buttonProps} onClick={() => {
-                setEventType("league")
-                setStep("date")
-              }}>
-                League
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "date" ? "block" : "none", // Event Type
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                {`What date will your ${eventType === "league" ? "league start" : `${eventType} be on`}?`}
-              </Text>
-              <br />
-              <InputText
-                label="name"
-                name="name"
-                placeholder="Event name" />
-              <InputText
-                label="date"
-                name="date"
-                placeholder="date"
-                type="date" />
-              {
-                eventType === "tournament" &&
-                <div>
-                  <Text as="h3" fontSize="xl" color="white">
-                    Over how many days will your event be held?
-                  </Text>
+          <Section verticalPadding horizontalPadding bg="#DEE4EE url(/hero-dots.png) no-repeat top right" backgroundSize="10%" textAlign="left" fullWidth>
+            <Text as="h1" fontSize="5xl" color="#4E4C5C">Create an <span style={{ color: "#EC1D51" }}>event.</span></Text>
+          </Section>
+          <Section fullWidth verticalPadding>
+            <Box display="flex">
+              <Box flexShrink={0} className="hide-mobile">
+                <Section horizontalPadding textAlign="left">
+                  {
+                    step === "details" &&
+                    <Text as="h1" fontSize="5xl" color="#4E4C5C"><span style={{ color: "#EC1D51" }}>01.</span></Text>
+                  }
+                  {
+                    step === "game" &&
+                    <Text as="h1" fontSize="5xl" color="#4E4C5C"><span style={{ color: "#EC1D51" }}>02.</span></Text>
+                  }
+                  {
+                    step === "extra" &&
+                    <Text as="h1" fontSize="5xl" color="#4E4C5C"><span style={{ color: "#EC1D51" }}>03.</span></Text>
+                  }
+                  {
+                    step === "thanks" &&
+                    <Text as="h1" fontSize="5xl" color="#4E4C5C"><span style={{ color: "#EC1D51" }}>04.</span></Text>
+                  }
                   <br />
-                  <InputSelect
-                    name="days"
-                    color="brand.900"
-                  >
-                    <option value={1} selected>1</option>
-                    <option value={2}>2</option>
-                    <option value={3}>3</option>
-                    <option value={4}>4</option>
-                  </InputSelect>
-                </div>
-              }
-              {
-                eventType === "league" &&
-                <div>
-                  <Text as="h3" fontSize="xl" color="white">
-                    How many weeks will your league run for?
-                  </Text>
+                  {
+                    step === "details" &&
+                    <Text as="h2" fontSize="4xl" color="#4E4C5C">Tell us about the event</Text>
+                  }
+                  {
+                    step === "game" &&
+                    <Text as="h2" fontSize="4xl" color="#4E4C5C">Now tell us about the game.</Text>
+                  }
+                  {
+                    step === "extra" &&
+                    <Text as="h2" fontSize="4xl" color="#4E4C5C">How will we play this?</Text>
+                  }
+                  {
+                    step === "thanks" &&
+                    <Text as="h2" fontSize="4xl" color="#4E4C5C">All set up!<br />Now let's play.</Text>
+                  }
                   <br />
-                  <InputSelect
-                    name="weeks"
-                    color="brand.900"
+                  <br />
+                </Section>
+                <Image src="/xboxController.png" alt="Login" margin="0 auto" display="block" />
+              </Box>
+              <Section horizontalPadding textAlign="left">
+                <div style={{ width: "100%", maxWidth: "768px", margin: "0 auto" }}>
+                  <div
+                    style={{
+                      display: step === "details" ? "block" : "none", // Event Type
+                    }}
                   >
-                    <option value={1} selected>1</option>
-                    <option value={2}>2</option>
-                  </InputSelect>
-                </div>
-              }
-              <br /><br />
-              <Button {...buttonProps} onClick={() => setStep("eventPrivacy")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "eventPrivacy" ? "block" : "none"
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                What kind of event will this be?
-              </Text>
-              <br />
-              <div>
-                <InputRadio
-                  name="event_privacy"
-                  value="private"
-                >
-                  Private - Invite only
-                </InputRadio>
-                <InputRadio
-                  name="event_privacy"
-                  value="public"
-                >
-                  Public - Anyone can join
-                </InputRadio>
-              </div>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("eventLocation")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "eventLocation" ? "block" : "none", // Event Type
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Where will this event be held?
-              </Text>
-              <br />
-              <Button {...buttonProps} onClick={() => setStep("platforms")}>
-                Online
-              </Button>
-              <br /><br />
-              <Button {...buttonProps} onClick={() => setStep("physicalLocation")}>
-                Physical location
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "physicalLocation" ? "block" : "none", // Organiser Venue
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Select a venue from the list
-              </Text>
-              <br />
-              <InputSearchable
-                label="Venue Name"
-                name="venueId"
-                type = "venueId"
-                formProps={props}
-                placeholder="Venue Name"
-                searchType="venue"
-              />
-              <Button {...buttonProps} onClick={() => setStep("platforms")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "platforms" ? "block" : "none", // Preferred platforms
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                What platform will your event be played on?
-              </Text>
-              <br />
-              <div>
-                {
-                  platforms &&
-                  platforms.length > 0 &&
-                  platforms.map(platform => {
-                    return (
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      What kind of event would you like to organise?
+                    </Text>
+                    <br />
+                    <InputRadio
+                      name="eventType"
+                      value="social"
+                    >
+                      Social event
+                    </InputRadio>
+                    <InputRadio
+                      name="eventType"
+                      value="tournament"
+                    >
+                      Tournament
+                    </InputRadio>
+                    <InputRadio
+                      name="eventType"
+                      value="league"
+                    >
+                      League
+                    </InputRadio>
+                  </div>
+                  <div
+                    style={{
+                      display: step === "details" ? "block" : "none", // Event Type
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      {`What date will your ${props.values.eventType === "league" ? "league start" : `${props.values.eventType} be on`}?`}
+                    </Text>
+                    <br />
+                    <InputText
+                      name="name"
+                      placeholder="Event name" />
+                    <InputText
+                      name="date"
+                      placeholder="date"
+                      type="date" />
+                    {
+                      props.values.eventType === "tournament" &&
+                      <div>
+                        <Text as="h4" fontSize="xl" color="#EC1D51">
+                          Over how many days will your event be held?
+                        </Text>
+                        <br />
+                        <InputSelect
+                          name="days"
+                          color="brand.900"
+                        >
+                          <option value={1} selected>1</option>
+                          <option value={2}>2</option>
+                          <option value={3}>3</option>
+                          <option value={4}>4</option>
+                        </InputSelect>
+                      </div>
+                    }
+                    {
+                      props.values.eventType === "league" &&
+                      <div>
+                        <Text as="h4" fontSize="xl" color="#EC1D51">
+                          How many weeks will your league run for?
+                        </Text>
+                        <br />
+                        <InputSelect
+                          name="weeks"
+                          color="brand.900"
+                        >
+                          <option value={1} selected>1</option>
+                          <option value={2}>2</option>
+                        </InputSelect>
+                      </div>
+                    }
+                  </div>
+                  <div
+                    style={{
+                      display: step === "details" ? "block" : "none"
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      What kind of event will this be?
+                    </Text>
+                    <br />
+                    <div>
                       <InputRadio
-                        key={platform.id}
-                        name="platform"
-                        value={platform.id}
+                        name="event_privacy"
+                        value="private"
                       >
-                        {platform.name}
+                        Private - Invite only
                       </InputRadio>
-                    )
-                  })
-                }
-              </div>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("games")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "games" ? "block" : "none", // Venue games
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Games available to play
-              </Text>
-              <br />
-              <div>
-                {
-                  games &&
-                  games.length > 0 &&
-                  games.map(game => {
-                    if (game.platforms.findIndex(item => item.id === props.values.platform) === -1) return null
-                    return (
                       <InputRadio
-                        key={game.id}
-                        name="gameId"
-                        value={game.id}
+                        name="event_privacy"
+                        value="public"
                       >
-                        {game.name}
+                        Public - Anyone can join
                       </InputRadio>
-                    )
-                  })
-                }
-              </div>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("teamComposition")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "teamComposition" ? "block" : "none", // Venue games
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Is this event for individuals or teams?
-              </Text>
-              <br />
-              <div>
-                <InputRadio
-                  name="teamComposition"
-                  value="individual"
-                >
-                  Individuals
-                </InputRadio>
-                <InputRadio
-                  name="teamComposition"
-                  value="team"
-                >
-                  Teams
-                </InputRadio>
-              </div>
-              {
-                props.values.teamComposition === "team" &&
-                <div>
-                  <br /><br />
-                  <Text as="h4" fontSize="3xl" color="white">
-                    How many players can join per team?
-                  </Text>
-                  <br />
-                  <InputSelect
-                    name="team_members"
-                    color="brand.900"
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: step === "details" ? "block" : "none", // Event Type
+                    }}
                   >
-                    <option value={2} selected>2</option>
-                    <option value={3}>3</option>
-                    <option value={4}>4</option>
-                    <option value={5}>5</option>
-                    <option value={6}>6</option>
-                  </InputSelect>
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Where will this event be held?
+                    </Text>
+                    <br />
+                    <InputRadio
+                      name="location"
+                      value="online">
+                      Online
+                    </InputRadio>
+                    <InputRadio
+                      name="location"
+                      value="physicalLocation">
+                      Physical location
+                    </InputRadio>
+                    {
+                      props.values.location === "physicalLocation" &&
+                      <div>
+                        <Text as="h4" fontSize="xl" color="#EC1D51">
+                          Select a venue from the list
+                        </Text>
+                        <br />
+                        <InputSearchable
+                          label="Venue Name"
+                          name="venueId"
+                          type = "venueId"
+                          formProps={props}
+                          placeholder="Venue Name"
+                          searchType="venue"
+                        />
+                      </div>
+                    }
+                    <br /><br />
+                    <Button
+                      {...buttonProps}
+                      onClick={() => {
+                        setStep("game")
+                        window.scrollTo({
+                          top: 0,
+                          behavior: 'smooth'
+                        })
+                      }
+                    }>
+                      Continue
+                    </Button>
+                  </div>
+                  <div
+                    style={{
+                      display: step === "game" ? "block" : "none", // Preferred platforms
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      What platform will your event be played on?
+                    </Text>
+                    <br />
+                    <div>
+                      {
+                        platforms &&
+                        platforms.length > 0 &&
+                        platforms.map(platform => {
+                          return (
+                            <InputRadio
+                              key={platform.id}
+                              name="platform"
+                              value={platform.id}
+                            >
+                              {platform.name}
+                            </InputRadio>
+                          )
+                        })
+                      }
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      display: step === "game" ? "block" : "none", // Venue games
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Games available to play
+                    </Text>
+                    <br />
+                    <div>
+                      {
+                        games &&
+                        games.length > 0 &&
+                        games.map(game => {
+                          if (game.platforms.findIndex(item => item.id === props.values.platform) === -1) return null
+                          return (
+                            <InputRadio
+                              key={game.id}
+                              name="gameId"
+                              value={game.id}
+                            >
+                              {game.name}
+                            </InputRadio>
+                          )
+                        })
+                      }
+                    </div>
+                    <br /><br />
+                    <Button
+                      {...buttonProps}
+                      onClick={() => {
+                        setStep("extra")
+                        window.scrollTo({
+                          top: 0,
+                          behavior: 'smooth'
+                        })
+                      }
+                    }>
+                      Continue
+                    </Button>
+                  </div>
+                  <div
+                    style={{
+                      display: step === "extra" ? "block" : "none", // Venue games
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Is this event for individuals or teams?
+                    </Text>
+                    <br />
+                    <div>
+                      <InputRadio
+                        name="teamComposition"
+                        value="individual"
+                      >
+                        Individuals
+                      </InputRadio>
+                      <InputRadio
+                        name="teamComposition"
+                        value="team"
+                      >
+                        Teams
+                      </InputRadio>
+                    </div>
+                    {
+                      props.values.teamComposition === "team" &&
+                      <div>
+                        <Text as="h4" fontSize="xl" color="#EC1D51">
+                          How many players can join per team?
+                        </Text>
+                        <br />
+                        <InputSelect
+                          name="team_members"
+                          color="brand.900"
+                        >
+                          <option value={2} selected>2</option>
+                          <option value={3}>3</option>
+                          <option value={4}>4</option>
+                          <option value={5}>5</option>
+                          <option value={6}>6</option>
+                        </InputSelect>
+                      </div>
+                    }
+                  </div>
+                  <div
+                    style={{
+                      display: step === "extra" ? "block" : "none", // Venue games
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      What format will the game be played in?
+                    </Text>
+                    <br />
+                    <div>
+                      <InputRadio
+                        name="format"
+                        value="pool-system"
+                      >
+                        Pool system
+                      </InputRadio>
+                      <InputRadio
+                        name="format"
+                        value="knockout"
+                      >
+                        Knockout
+                      </InputRadio>
+                      <InputRadio
+                        name="format"
+                        value="round-robin"
+                      >
+                        Round robin
+                      </InputRadio>
+                      <InputRadio
+                        name="format"
+                        value="double-round-robin"
+                      >
+                        Double round robin
+                      </InputRadio>
+                    </div>
+                    <Text as="cite">Teams will be matched up randomly upon registration, you can customise these before the event starts.</Text>
+                    <br /><br />
+                  </div>
+                  <div
+                    style={{
+                      display: step === "extra" ? "block" : "none", // Venue games
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Will there be a fee for this event?
+                    </Text>
+                    <br />
+                    <div>
+                      <InputRadio
+                        name="fee_type"
+                        value="free"
+                      >
+                        Free event
+                      </InputRadio>
+                      <InputRadio
+                        name="fee_type"
+                        value="prize"
+                      >
+                        Prize pool
+                      </InputRadio>
+                      <InputRadio
+                        name="fee_type"
+                        value="entry-fee"
+                      >
+                        Entry fee
+                      </InputRadio>
+                    </div>
+                    <br /> <br />
+                    <SubmitButton
+                      isLoading={loading}
+                      {...buttonProps}
+                      onClick={() => {
+                        setStep("thanks")
+                        window.scrollTo({
+                          top: 0,
+                          behavior: 'smooth'
+                        })
+                      }}>
+                      Create event
+                    </SubmitButton>
+                  </div>
+                  <div
+                    style={{
+                      display: step === "thanks" ? "block" : "none"
+                    }}
+                  >
+                    <Text as="h3" fontSize="3xl" color="#EC1D51">
+                      Your event has now been setup!
+                    </Text>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Post to Facebook
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Post to Discord
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setStep(100)}>
+                      Post to twitter
+                    </Button>
+                    <br /> <br />
+                    <Button {...buttonProps} onClick={() => setResult({ redirect: "/" })}>
+                      Home
+                    </Button>
+                  </div>
                 </div>
-              }
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("format")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "format" ? "block" : "none", // Venue games
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                What format will the game be played in?
-              </Text>
-              <br />
-              <div>
-                <InputRadio
-                  name="format"
-                  value="pool-system"
-                >
-                  Pool system
-                </InputRadio>
-                <InputRadio
-                  name="format"
-                  value="knockout"
-                >
-                  Knockout
-                </InputRadio>
-                <InputRadio
-                  name="format"
-                  value="round-robin"
-                >
-                  Round robin
-                </InputRadio>
-                <InputRadio
-                  name="format"
-                  value="double-round-robin"
-                >
-                  Double round robin
-                </InputRadio>
-              </div>
-              <br />
-              <Text as="cite">Teams will be matched up randomly upon registration, you can customise these before the event starts.</Text>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep("fee")}>
-                Next
-              </Button>
-            </div>
-            <div
-              style={{
-                display: step === "fee" ? "block" : "none", // Venue games
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Will there be a fee for this event?
-              </Text>
-              <br />
-              <div>
-                <InputRadio
-                  name="fee_type"
-                  value="free"
-                >
-                  Free event
-                </InputRadio>
-                <InputRadio
-                  name="fee_type"
-                  value="prize"
-                >
-                  Prize pool
-                </InputRadio>
-                <InputRadio
-                  name="fee_type"
-                  value="entry-fee"
-                >
-                  Entry fee
-                </InputRadio>
-              </div>
-              <br /> <br />
-              <SubmitButton isLoading={loading} {...buttonProps} onClick={() => setStep("thanks")}>
-                Next
-              </SubmitButton>
-            </div>
-            <div
-              style={{
-                display: step === "thanks" ? "block" : "none"
-              }}
-            >
-              <Text as="h4" fontSize="3xl" color="white">
-                Your event has now been setup!
-              </Text>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Post to Facebook
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Post to Discord
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setStep(100)}>
-                Post to twitter
-              </Button>
-              <br /> <br />
-              <Button {...buttonProps} onClick={() => setResult({ redirect: "/" })}>
-                Home
-              </Button>
-            </div>
-          </div>
+              </Section>
+            </Box>
+          </Section>
         </Form>
         }
       </Formik>
