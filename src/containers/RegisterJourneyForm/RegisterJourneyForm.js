@@ -15,7 +15,6 @@ import InputCheckBox from "./../../components/InputCheckBox/InputCheckBox"
 import InputRadio from "./../../components/InputRadio/InputRadio"
 import SubmitButton from "./../../components/SubmitButton/SubmitButton"
 import Section from "./../../components/Section/Section"
-import { Link } from "react-router-dom"
 
 const RegisterJourneyForm = (props) => {
   const [loading, setLoading] = useState(false)
